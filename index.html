@@ -5,10 +5,10 @@
   <title>できたよペンギン</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- PWA系 -->
+  <!-- PWA / アイコン周り -->
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="favicon.png">
   <meta name="theme-color" content="#2fa6e8">
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -76,7 +76,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      overflow: hidden;
+    }
+
+    .logo-circle img {
+      width: 34px;
+      height: 34px;
+      object-fit: cover; /* いい感じに丸くトリミング */
+      display: block;
     }
 
     .title-area {
@@ -466,12 +473,12 @@
 
     .day-cell {
       position: relative;
-      height: 46px; /* ← 少し縦を詰める */
+      height: 46px; /* 少し縦を詰めた */
       cursor: pointer;
       transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
     }
 
-    /* ★ TODAY・日付・スタンプがかぶらないレイアウト ★ */
+    /* 日付・スタンプ・今日ラベルが被らないレイアウト */
     .day-inner {
       position: relative;
       height: 100%;
@@ -513,7 +520,6 @@
       object-fit: contain;
       display: block;
     }
-    /* ★ ここまで ★ */
 
     .day-cell.empty .day-inner {
       background: transparent;
@@ -533,7 +539,7 @@
     }
 
     .day-today .day-inner::after {
-      content: "TODAY";
+      content: "今日";
       position: absolute;
       top: 3px;
       right: 4px;
@@ -930,7 +936,7 @@
         padding: 10px 8px 12px;
       }
       .day-cell {
-        height: 42px; /* 小さい画面ではさらに少しだけ狭める */
+        height: 42px;
       }
     }
   </style>
@@ -938,7 +944,10 @@
 <body>
   <div class="app">
     <header>
-      <div class="logo-circle">🐧</div>
+      <div class="logo-circle">
+        <!-- さきほどのペンギン画像を favicon.png として置いておく想定 -->
+        <img src="favicon.png" alt="できたよペンギン">
+      </div>
       <div class="title-area">
         <div class="app-title">できたよペンギン</div>
         <div class="app-sub">毎日の「できた！」をスタンプで記録しよう</div>
@@ -1212,14 +1221,26 @@
       function ensureStampOrder() {
         const map = buildStampMaps();
         const allIds = Array.from(map.keys());
-        if (!Array.isArray(state.stampOrder) || state.stampOrder.length === 0) {
-          state.stampOrder = allIds.slice();
-          return;
+
+        const seen = new Set();
+        let newOrder = [];
+
+        if (Array.isArray(state.stampOrder)) {
+          state.stampOrder.forEach(id => {
+            if (map.has(id) && !seen.has(id)) {
+              seen.add(id);
+              newOrder.push(id);
+            }
+          });
         }
-        let newOrder = state.stampOrder.filter(id => map.has(id));
+
         allIds.forEach(id => {
-          if (!newOrder.includes(id)) newOrder.push(id);
+          if (!seen.has(id)) {
+            seen.add(id);
+            newOrder.push(id);
+          }
         });
+
         state.stampOrder = newOrder;
       }
 
@@ -1619,7 +1640,7 @@
 
         let html = "";
         html += '<div class="progress-header">';
-        html += '<span class="progress-penguin">☀️</span>'; // ← 太陽アイコンに変更
+        html += '<span class="progress-penguin">☀️</span>';
         html += '<span class="progress-text-main">通算 ' + total + ' 回できたよ</span>';
         html += '<span class="progress-text-sub-small">（ごほうび：' + threshold + '回ごと／上限50回）</span>';
         html += "</div>";
@@ -1927,9 +1948,8 @@
             dataUrl
           };
           state.customStamps.push(stamp);
-          ensureStampOrder();
-          state.stampOrder.push(id);
-          state.selectedStampId = id;
+          ensureStampOrder();        // ここで order に追加されるので
+          state.selectedStampId = id; // 追加で push しない
           saveState();
           renderStampOptions();
           updateStampEditUI();
@@ -2085,4 +2105,3 @@
   </script>
 </body>
 </html>
-
