@@ -51,7 +51,7 @@
       width: 100%;
       max-width: 480px;
       min-height: 100vh;
-      padding: 16px 14px 32px;
+      padding: 16px 14px 20px; /* 下の余白を少し減らした */
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -75,9 +75,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10px;   /* 角だけアール */
-      overflow: hidden;      /* 画像も角丸に沿わせる */
-      background: none;      /* 余計な背景は付けない */
+      border-radius: 10px;
+      overflow: hidden;
+      background: none;
       padding: 0;
       flex-shrink: 0;
     }
@@ -85,7 +85,7 @@
     .logo-circle img {
       width: 100%;
       height: 100%;
-      object-fit: contain;   /* 画像はそのまま縮小 */
+      object-fit: contain;
       display: block;
     }
 
@@ -357,8 +357,8 @@
     }
 
     .calendar-card {
-      flex: 1;
-      min-height: 0;
+      /* 伸ばさず、中身に合わせて高さが決まるように変更 */
+      flex: 0 0 auto;
       background: rgba(255, 255, 255, 0.98);
       border-radius: 22px;
       padding: 10px 8px 12px;
@@ -476,7 +476,7 @@
 
     .day-cell {
       position: relative;
-      height: 44px; /* ちょい縦狭め */
+      height: 44px;
       cursor: pointer;
       transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
     }
@@ -728,6 +728,25 @@
       line-height: 1.5;
     }
 
+    /* 注意書きと入力欄を分けるための装飾 */
+    .modal-divider {
+      border-top: 1px dashed rgba(181,224,255,0.9);
+      margin: 8px 0 10px;
+    }
+
+    .modal-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-section-title span {
+      font-size: 14px;
+    }
+
     .modal label {
       display: block;
       font-size: 11px;
@@ -882,7 +901,6 @@
       margin-top: 6px;
     }
 
-    /* OKボタンは控えめ */
     .circle-btn {
       border-radius: 999px;
       border: none;
@@ -1028,10 +1046,15 @@
         <div class="modal-text">
           このツールのデータは、この端末のブラウザの中だけに保存されます。<br>
           端末やブラウザを変えると、スタンプの履歴は引き継がれません。<br><br>
-          気に入ったら、ブラウザの「ホーム画面に追加」から<br>
-          アプリとして登録しておくのがおすすめです 🐧✨<br><br>
-          継続したいことの名前と、何回できたら宝箱がひらくかを決めましょう。
+          早めにブラウザの「ホーム画面に追加」から<br>
+          アプリとして登録しておくのがおすすめです 🐧✨
         </div>
+
+        <div class="modal-divider"></div>
+        <div class="modal-section-title">
+          <span>📝</span> カレンダーの設定
+        </div>
+
         <label>
           カレンダー名
           <input type="text" id="firstCalendarName" placeholder="例）英単語、ストレッチ、おさんぽ など" />
