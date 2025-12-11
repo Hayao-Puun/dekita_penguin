@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <title>できたよペンギン</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- PWA系 -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2fa6e8">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="できたよペンギン">
+
   <style>
     :root {
       --main-blue: #2fa6e8;
@@ -14,7 +23,6 @@
       --card-radius: 18px;
       --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.08);
 
-      /* カレンダー用カラー（テーマで上書き） */
       --calendar-bg1: #f8fbff;
       --calendar-bg2: #eef7ff;
       --calendar-border: #d0ebff;
@@ -326,6 +334,7 @@
     .stamp-extra-left {
       display: flex;
       gap: 4px;
+      flex-wrap: wrap;
     }
 
     .stamp-hint {
@@ -456,21 +465,23 @@
 
     .day-cell {
       position: relative;
-      height: 46px;
+      height: 46px; /* ← 少し縦を詰める */
       cursor: pointer;
       transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
     }
 
+    /* ★ TODAY・日付・スタンプがかぶらないレイアウト ★ */
     .day-inner {
+      position: relative;
       height: 100%;
       margin: 1px 1px;
       border-radius: 12px;
-      padding: 2px 2px 4px;
+      padding: 4px 4px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      gap: 0;
+      gap: 2px;
       background: linear-gradient(135deg, var(--calendar-bg1), var(--calendar-bg2));
       box-shadow: 0 2px 4px var(--calendar-shadow-color);
       overflow: hidden;
@@ -479,24 +490,29 @@
     .day-number {
       font-size: 11px;
       font-weight: 600;
+      align-self: flex-start;
+      margin-left: 2px;
+      margin-top: 1px;
     }
 
     .day-stamp {
       flex: 1;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      margin-top: 1px;
-      transition: transform 0.08s ease;
+      font-size: 20px;
+      margin-top: 0;
+      pointer-events: none;
     }
 
     .day-stamp img {
-      max-width: 80%;
-      max-height: 80%;
+      max-width: 70%;
+      max-height: 70%;
       object-fit: contain;
       display: block;
     }
+    /* ★ ここまで ★ */
 
     .day-cell.empty .day-inner {
       background: transparent;
@@ -516,15 +532,17 @@
     }
 
     .day-today .day-inner::after {
-      content: "today";
+      content: "TODAY";
       position: absolute;
-      bottom: 3px;
-      right: 3px;
-      font-size: 8px;
-      background: rgba(47, 166, 232, 0.1);
+      top: 3px;
+      right: 4px;
+      font-size: 7px;
+      font-weight: 600;
+      background: rgba(47, 166, 232, 0.12);
       border-radius: 999px;
-      padding: 0 3px;
+      padding: 1px 4px 0;
       color: #2f7aa3;
+      pointer-events: none;
     }
 
     .no-calendar-hint {
@@ -551,6 +569,7 @@
       align-items: center;
       gap: 6px;
       font-size: 11px;
+      flex-wrap: wrap;
     }
 
     .progress-penguin {
@@ -561,22 +580,54 @@
       font-weight: 600;
     }
 
+    .progress-text-sub-small {
+      font-size: 10px;
+      color: #5a7c96;
+    }
+
     .progress-bar {
-      position: relative;
       margin-top: 2px;
-      padding: 6px 4px 2px;
+    }
+
+    .progress-scroll {
+      position: relative;
+      overflow-x: auto;
+      padding: 4px 0 2px;
+    }
+
+    .progress-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    .progress-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .progress-scroll::-webkit-scrollbar-thumb {
+      background: rgba(160, 200, 235, 0.7);
+      border-radius: 999px;
     }
 
     .progress-track {
+      position: relative;
       display: flex;
       align-items: flex-end;
-      justify-content: space-between;
-      gap: 2px;
-      position: relative;
+      gap: 4px;
+      padding: 0 4px;
+    }
+
+    .progress-rail {
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 50%;
+      height: 2px;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, rgba(160,200,235,0.5), rgba(160,200,235,0.1));
+      z-index: -1;
     }
 
     .progress-step {
-      flex: 1;
+      flex: 0 0 auto;
+      width: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -600,16 +651,6 @@
       font-size: 16px;
       margin-bottom: 1px;
       transform: translateY(-4px);
-    }
-
-    .progress-rail {
-      position: absolute;
-      left: 4px;
-      right: 4px;
-      top: 10px;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(160,200,235,0.5), rgba(160,200,235,0.1));
-      z-index: -1;
     }
 
     .progress-text-sub {
@@ -674,17 +715,31 @@
 
     .modal-text {
       font-size: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       line-height: 1.5;
     }
 
-    .modal input {
+    .modal label {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .reward-input-note {
+      display: block;
+      font-size: 10px;
+      color: #5a7c96;
+      margin-top: 2px;
+    }
+
+    .modal input[type="text"],
+    .modal input[type="number"] {
       width: 100%;
       border-radius: 999px;
       border: 1px solid #b5e0ff;
       padding: 8px 12px;
       font-size: 13px;
-      margin-bottom: 14px;
+      margin-top: 4px;
     }
 
     .modal-footer {
@@ -800,6 +855,12 @@
     .reward-message-sub {
       font-size: 12px;
       opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .reward-message-sub2 {
+      font-size: 11px;
+      opacity: 0.9;
       margin-bottom: 12px;
     }
 
@@ -868,7 +929,7 @@
         padding: 10px 8px 12px;
       }
       .day-cell {
-        height: 40px;
+        height: 42px; /* 小さい画面ではさらに少しだけ狭める */
       }
     }
   </style>
@@ -901,15 +962,14 @@
           <div class="theme-palette" id="themePalette"></div>
         </div>
         <div class="stamp-label">
-          <span>✨</span> スタンプをえらんでね（編集でカスタム）
+          <span>✨</span> スタンプをえらんでね（スタンプ編集でカスタム）
         </div>
-        <div class="stamp-list" id="stampList">
-          <!-- JSで生成 -->
-        </div>
+        <div class="stamp-list" id="stampList"></div>
         <div class="stamp-extra">
           <div class="stamp-extra-left">
-            <button class="btn sub tiny" id="editStampBtn">編集</button>
-            <button class="btn sub tiny" id="addStampImageBtn">＋画像スタンプ</button>
+            <button class="btn sub tiny" id="editStampBtn">スタンプ編集</button>
+            <button class="btn sub tiny" id="rewardConfigBtn">ごほうび回数</button>
+            <button class="btn sub tiny" id="addStampImageBtn">＋スタンプ</button>
           </div>
           <div class="stamp-hint" id="stampHint"></div>
         </div>
@@ -930,12 +990,9 @@
                 <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
               </tr>
             </thead>
-            <tbody id="calendarBody">
-              <!-- JSで生成 -->
-            </tbody>
+            <tbody id="calendarBody"></tbody>
           </table>
 
-          <!-- 進捗エリア（スクショ対象） -->
           <div id="progressArea" class="progress-area"></div>
         </div>
 
@@ -948,7 +1005,7 @@
     <div class="footer-credit">by Hayao</div>
   </div>
 
-  <!-- 初回用オーバーレイ -->
+  <!-- 初回用オーバーレイ（同期されない注意つき） -->
   <div class="overlay" id="firstCalendarOverlay">
     <div class="modal">
       <div class="modal-content">
@@ -956,10 +1013,24 @@
           <span>🐧</span> はじめてのカレンダー
         </div>
         <div class="modal-text">
-          継続したいことの名前を入力して、<br>
-          最初のカレンダーを作成しましょう。
+          このツールのデータは、この端末のブラウザの中だけに保存されます。<br>
+          端末やブラウザを変えると、スタンプの履歴は引き継がれません。<br><br>
+          気に入ったら、ブラウザの「ホーム画面に追加」から<br>
+          アプリとして登録しておくのがおすすめです 🐧✨<br><br>
+          継続したいことの名前と、何回できたら宝箱がひらくかを決めましょう。
         </div>
-        <input type="text" id="firstCalendarName" placeholder="例）英単語、ストレッチ、おさんぽ など" />
+        <label>
+          カレンダー名
+          <input type="text" id="firstCalendarName" placeholder="例）英単語、ストレッチ、おさんぽ など" />
+        </label>
+        <label>
+          ごほうびが出る回数（1〜50回）
+          <input type="number" id="firstRewardValue" min="1" max="50" value="15" />
+          <span class="reward-input-note">
+            例：15 と入れると、15回ごとに宝箱が出ます。<br>
+            ※1〜50のあいだで設定できます（上限50回）。
+          </span>
+        </label>
         <div class="modal-footer">
           <button class="btn" id="firstCalendarCreateBtn">はじめる</button>
         </div>
@@ -983,6 +1054,7 @@
         </div>
         <div class="reward-message-main" id="rewardMessageMain"></div>
         <div class="reward-message-sub">コツコツがんばっているあなたに、<br>ペンギンからごほうびだよ 🎁</div>
+        <div class="reward-message-sub2" id="rewardMessageSub2"></div>
         <div class="reward-actions">
           <button class="circle-btn" id="rewardCloseBtn">OK</button>
           <button class="btn sub tiny" id="rewardShareBtn">スクショしてシェア</button>
@@ -992,17 +1064,13 @@
     </div>
   </div>
 
-  <!-- スクショ用ライブラリ -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
-  <!-- 画像スタンプ用ファイル入力 -->
   <input type="file" id="stampImageInput" accept="image/*" style="display:none;" />
 
   <script>
     (function () {
-      const STORAGE_KEY = "dekitaPenguinData_v1";
+      const STORAGE_KEY = "dekitaPenguinData_v2";
 
-      // テーマプリセット（カレンダーごと）
       const THEME_PRESETS = [
         {
           id: "blue",
@@ -1024,7 +1092,7 @@
           id: "lavender",
           main: "#7f7ae5",
           light: "#ece9ff",
-          accent: "#ffb6e8",
+          accent: "#ffb6e1",
           text: "#3a346d",
           bodyBg: "radial-gradient(circle at top, #f4f0ff 0, #e3ddff 40%, #cec7ff 100%)"
         },
@@ -1078,7 +1146,6 @@
         }
       ];
 
-      // デフォルトのスタンプ
       const BUILTIN_STAMPS = [
         { id: "b0", type: "emoji", emoji: "🐧" },
         { id: "b1", type: "emoji", emoji: "❤️" },
@@ -1091,10 +1158,10 @@
         calendars: [],
         currentCalendarId: null,
         currentYear: null,
-        currentMonth: null, // 0-11
-        customStamps: [], // {id, type:"image", dataUrl}
+        currentMonth: null,
+        customStamps: [],
         selectedStampId: BUILTIN_STAMPS[0].id,
-        stampOrder: [], // [stampId...]
+        stampOrder: [],
         reorderActive: false,
         reorderSourceId: null,
         editMode: false
@@ -1113,16 +1180,19 @@
       const progressArea = document.getElementById("progressArea");
       const stampHint = document.getElementById("stampHint");
       const editStampBtn = document.getElementById("editStampBtn");
+      const rewardConfigBtn = document.getElementById("rewardConfigBtn");
 
       const prevMonthBtn = document.getElementById("prevMonthBtn");
       const nextMonthBtn = document.getElementById("nextMonthBtn");
 
       const firstCalendarOverlay = document.getElementById("firstCalendarOverlay");
       const firstCalendarNameInput = document.getElementById("firstCalendarName");
+      const firstRewardValueInput = document.getElementById("firstRewardValue");
       const firstCalendarCreateBtn = document.getElementById("firstCalendarCreateBtn");
 
       const rewardOverlay = document.getElementById("rewardOverlay");
       const rewardMessageMain = document.getElementById("rewardMessageMain");
+      const rewardMessageSub2 = document.getElementById("rewardMessageSub2");
       const rewardCloseBtn = document.getElementById("rewardCloseBtn");
       const rewardShareBtn = document.getElementById("rewardShareBtn");
 
@@ -1131,7 +1201,6 @@
 
       let lastRewardTotal = 0;
 
-      // ====== スタンプ関連ヘルパー ======
       function buildStampMaps() {
         const map = new Map();
         BUILTIN_STAMPS.forEach(s => map.set(s.id, s));
@@ -1167,7 +1236,15 @@
         return map.get(id) || null;
       }
 
-      // ====== テーマ適用 ======
+      function getCurrentCalendar() {
+        return state.calendars.find(c => c.id === state.currentCalendarId) || null;
+      }
+
+      function getRewardThreshold(cal) {
+        if (!cal || !cal.rewardThreshold || cal.rewardThreshold <= 0) return 15;
+        return cal.rewardThreshold;
+      }
+
       function applyTheme(themeId) {
         const theme = THEME_PRESETS.find(t => t.id === themeId) || THEME_PRESETS[0];
         const root = document.documentElement;
@@ -1176,7 +1253,6 @@
         root.style.setProperty("--accent", theme.accent);
         root.style.setProperty("--text-main", theme.text);
 
-        // カレンダー色
         root.style.setProperty("--calendar-bg1", theme.calBg1 || theme.light || "#f8fbff");
         root.style.setProperty("--calendar-bg2", theme.calBg2 || "#ffffff");
         const borderColor = theme.calBorder || (theme.main + "33");
@@ -1192,7 +1268,6 @@
         });
       }
 
-      // ====== 状態保存/読み込み ======
       function saveState() {
         try {
           const toSave = {
@@ -1237,7 +1312,7 @@
           state.stampOrder = data.stampOrder || [];
 
           state.calendars.forEach(cal => {
-            if (!cal.stamps) return;
+            if (!cal.stamps) cal.stamps = {};
             Object.keys(cal.stamps).forEach(key => {
               const v = cal.stamps[key];
               if (typeof v === "number") {
@@ -1245,8 +1320,9 @@
                 cal.stamps[key] = stamp ? stamp.id : BUILTIN_STAMPS[0].id;
               }
             });
-            if (!cal.themeId) {
-              cal.themeId = "blue";
+            if (!cal.themeId) cal.themeId = "blue";
+            if (!cal.rewardThreshold || cal.rewardThreshold <= 0) {
+              cal.rewardThreshold = 15;
             }
           });
 
@@ -1254,10 +1330,6 @@
         } catch (e) {
           console.warn("ローカルストレージから読み込みに失敗しました", e);
         }
-      }
-
-      function getCurrentCalendar() {
-        return state.calendars.find(c => c.id === state.currentCalendarId) || null;
       }
 
       function setTodayMonth() {
@@ -1286,14 +1358,17 @@
         setTimeout(() => el.classList.remove("pressed"), 120);
       }
 
-      // ====== カレンダー作成/削除 ======
-      function createCalendar(name) {
+      function createCalendar(name, rewardThreshold) {
         if (!name) return;
+        const rt = Number(rewardThreshold);
+        const safeRT = (rt && rt > 0 && rt <= 50) ? Math.floor(rt) : 15;
+
         const newCalendar = {
           id: Date.now() + Math.random(),
           name: name,
           stamps: {},
-          themeId: "blue"
+          themeId: "blue",
+          rewardThreshold: safeRT
         };
         state.calendars.push(newCalendar);
         state.currentCalendarId = newCalendar.id;
@@ -1329,7 +1404,6 @@
         }
       }
 
-      // ====== テーマUI ======
       function renderThemePalette() {
         themePalette.innerHTML = "";
         const current = getCurrentCalendar();
@@ -1354,7 +1428,6 @@
         });
       }
 
-      // ====== スタンプUI ======
       function clearReorderState() {
         state.reorderActive = false;
         state.reorderSourceId = null;
@@ -1492,14 +1565,16 @@
       function updateStampEditUI() {
         if (!editStampBtn) return;
         if (state.editMode) {
-          editStampBtn.textContent = "編集完了";
+          editStampBtn.textContent = "スタンプ編集完了";
           addStampImageBtn.style.display = "inline-flex";
+          rewardConfigBtn.style.display = "none";
           if (!state.reorderActive) {
-            stampHint.textContent = "画像スタンプの追加・並び替え・削除ができます";
+            stampHint.textContent = "スタンプの追加・並び替え・削除ができます";
           }
         } else {
-          editStampBtn.textContent = "編集";
+          editStampBtn.textContent = "スタンプ編集";
           addStampImageBtn.style.display = "none";
+          rewardConfigBtn.style.display = "inline-flex";
           clearReorderState();
           stampHint.textContent = "タップしてスタンプを選べるよ";
         }
@@ -1528,25 +1603,32 @@
         }
       }
 
-      // ====== 進捗UI ======
       function renderProgress(calendar) {
         const total = stampCount(calendar);
-        const inCycle = total % 15;
-        const cycleSteps = 15;
-        const nextMilestone = total === 0 ? 15 : Math.floor(total / 15 + 1) * 15;
-        const remaining = nextMilestone - total;
+        const threshold = getRewardThreshold(calendar);
+        const steps = threshold > 0 ? threshold : 1;
+        const inCycle = threshold > 0 ? (total % threshold) : 0;
+        const nextMilestone =
+          total === 0
+            ? threshold
+            : threshold * (Math.floor(total / threshold) + 1);
+        const remaining = threshold > 0 ? (nextMilestone - total) : 0;
+
+        const trackWidth = Math.max(steps * 18 + 16, 260);
 
         let html = "";
         html += '<div class="progress-header">';
-        html += '<span class="progress-penguin">🐧</span>';
+        html += '<span class="progress-penguin">☀️</span>'; // ← 太陽アイコンに変更
         html += '<span class="progress-text-main">通算 ' + total + ' 回できたよ</span>';
+        html += '<span class="progress-text-sub-small">（ごほうび：' + threshold + '回ごと／上限50回）</span>';
         html += "</div>";
 
         html += '<div class="progress-bar">';
+        html += '<div class="progress-scroll">';
+        html += '<div class="progress-track" style="width:' + trackWidth + 'px">';
         html += '<div class="progress-rail"></div>';
-        html += '<div class="progress-track">';
 
-        for (let i = 1; i <= cycleSteps; i++) {
+        for (let i = 1; i <= steps; i++) {
           const filled = inCycle === 0 ? false : i <= inCycle;
           const isPenguin = (inCycle === 0 && i === 1) || (inCycle > 0 && i === inCycle);
           html += '<div class="progress-step' + (filled ? " filled" : "") + '">';
@@ -1559,12 +1641,14 @@
           html += "</div>";
         }
 
-        html += "</div></div>";
+        html += "</div></div></div>";
 
-        if (remaining > 0) {
-          html += '<div class="progress-text-sub">ごほうびまであと ' + remaining + " 回</div>";
-        } else {
-          html += '<div class="progress-text-sub">ごほうびゲット！ つぎの宝箱まであと 15 回</div>';
+        if (threshold > 0) {
+          if (remaining > 0) {
+            html += '<div class="progress-text-sub">ごほうびまであと ' + remaining + " 回</div>";
+          } else {
+            html += '<div class="progress-text-sub">ごほうびゲット！ 次の宝箱まであと ' + threshold + " 回</div>";
+          }
         }
 
         progressArea.innerHTML = html;
@@ -1581,9 +1665,7 @@
         calendarBody.innerHTML = "";
         progressArea.innerHTML = "";
 
-        if (!hasCalendar) {
-          return;
-        }
+        if (!hasCalendar) return;
 
         const year = state.currentYear;
         const month0 = state.currentMonth;
@@ -1663,7 +1745,6 @@
         updateStampEditUI();
       }
 
-      // ====== スタンプ操作 ======
       function handleDayClick(e) {
         const cell = e.target.closest(".day-cell");
         if (!cell || cell.classList.contains("empty")) return;
@@ -1695,19 +1776,21 @@
         }
 
         const afterCount = stampCount(cal);
+        const threshold = getRewardThreshold(cal);
 
-        if (Math.floor(afterCount / 15) > Math.floor(beforeCount / 15)) {
-          showReward(afterCount);
+        if (threshold > 0 &&
+            Math.floor(afterCount / threshold) > Math.floor(beforeCount / threshold)) {
+          showReward(afterCount, threshold);
         }
 
         saveState();
         renderCalendar();
       }
 
-      // ====== 宝箱モーダル ======
-      function showReward(total) {
+      function showReward(total, threshold) {
         lastRewardTotal = total;
         rewardMessageMain.textContent = total + "回できたね！ごほうびをゲット 🎉";
+        rewardMessageSub2.textContent = "このカレンダーは " + threshold + "回ごとに宝箱がひらくよ。";
         rewardOverlay.classList.remove("hidden");
       }
 
@@ -1785,7 +1868,6 @@
         });
       }
 
-      // ====== スクショ ======
       function captureScreenshot() {
         const target = document.getElementById("calendarCapture");
         if (!target || typeof html2canvas === "undefined") {
@@ -1820,7 +1902,6 @@
         });
       }
 
-      // ====== 画像スタンプ追加 ======
       function handleAddStampImage() {
         if (!state.editMode) return;
         addPressedAnimation(addStampImageBtn);
@@ -1855,7 +1936,25 @@
         reader.readAsDataURL(file);
       }
 
-      // ====== イベント登録 ======
+      function openRewardConfig() {
+        const cal = getCurrentCalendar();
+        if (!cal) {
+          alert("カレンダーを作成してから設定してください。");
+          return;
+        }
+        const current = getRewardThreshold(cal);
+        const input = prompt("ごほうびは何回できたら表示しますか？（1〜50）", String(current));
+        if (input === null) return;
+        const n = parseInt(input, 10);
+        if (!n || n <= 0 || n > 50) {
+          alert("1〜50の数字で入力してください。（上限50回）");
+          return;
+        }
+        cal.rewardThreshold = n;
+        saveState();
+        renderCalendar();
+      }
+
       function attachEvents() {
         calendarBody.addEventListener("click", handleDayClick);
 
@@ -1883,9 +1982,13 @@
 
         addCalendarBtn.addEventListener("click", () => {
           const name = window.prompt("新しいカレンダーの名前を入力してください", "");
-          if (name && name.trim()) {
-            createCalendar(name.trim());
+          if (!name || !name.trim()) {
+            addPressedAnimation(addCalendarBtn);
+            return;
           }
+          const rtInput = window.prompt("ごほうびは何回できたら表示しますか？（1〜50）", "15");
+          const rt = rtInput ? parseInt(rtInput, 10) : 15;
+          createCalendar(name.trim(), rt);
           addPressedAnimation(addCalendarBtn);
         });
 
@@ -1913,7 +2016,8 @@
             firstCalendarNameInput.focus();
             return;
           }
-          createCalendar(name);
+          const rt = parseInt(firstRewardValueInput.value, 10) || 15;
+          createCalendar(name, rt);
           firstCalendarOverlay.classList.add("hidden");
         });
 
@@ -1950,9 +2054,13 @@
           renderStampOptions();
           updateStampEditUI();
         });
+
+        rewardConfigBtn.addEventListener("click", () => {
+          addPressedAnimation(rewardConfigBtn);
+          openRewardConfig();
+        });
       }
 
-      // ====== 初期化 ======
       function init() {
         const now = new Date();
         state.currentYear = now.getFullYear();
