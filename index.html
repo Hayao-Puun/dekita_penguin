@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>できたよペンギン</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <style>
+    :root {
+      --main-blue: #2fa6e8;
+      --light-blue: #e3f5ff;
+      --bg: #f4fbff;
+      --accent: #ffb6e1;
+      --text-main: #12415e;
+      --card-radius: 18px;
+      --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+      /* カレンダー用カラー（テーマで上書き） */
+      --calendar-bg1: #f8fbff;
+      --calendar-bg2: #eef7ff;
+      --calendar-border: #d0ebff;
+      --calendar-shadow-color: rgba(160, 200, 235, 0.4);
+      --calendar-today-border: rgba(47, 166, 232, 0.9);
+      --calendar-today-ring: rgba(47, 166, 232, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #f0fbff 0, #dff1ff 40%, #c5e7ff 100%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      padding: 16px 14px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #b7e8ff 40%, var(--main-blue) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .title-area {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .app-title {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .app-sub {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .top-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .calendar-selector {
+      flex: 1;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--card-radius);
+      padding: 6px 8px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    #calendarSelect {
+      flex: 1;
+      border-radius: 999px;
+      border-color: #b5e0ff;
+      border-style: solid;
+      border-width: 1px;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--main-blue);
+      color: #fff;
+      box-shadow: 0 3px 8px rgba(47, 166, 232, 0.5);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transform: translateY(0);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+
+    .btn.sub {
+      background: #b7e8ff;
+      color: var(--text-main);
+      box-shadow: 0 3px 8px rgba(77, 181, 238, 0.4);
+    }
+
+    .btn.tiny {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.97);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      filter: brightness(0.97);
+    }
+
+    #screenshotBtn {
+      width: 72px;
+      font-size: 10px;
+      padding-inline: 6px;
+      white-space: nowrap;
+    }
+
+    .stamp-panel {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--card-radius);
+      padding: 10px 12px 12px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .color-label {
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .theme-palette {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .theme-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .theme-dot::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      transition: opacity 0.08s ease;
+    }
+
+    .theme-dot.active {
+      transform: translateY(-1px) scale(1.05);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .theme-dot.active::after {
+      opacity: 1;
+    }
+
+    .stamp-label {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stamp-label span {
+      font-size: 16px;
+    }
+
+    .stamp-list {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .stamp-list::-webkit-scrollbar {
+      height: 4px;
+    }
+    .stamp-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .stamp-list::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.18);
+      border-radius: 999px;
+    }
+
+    .stamp-option {
+      flex: 0 0 56px;
+      border-radius: 14px;
+      height: 46px;
+      border: 2px solid transparent;
+      background: linear-gradient(135deg, #e4f6ff, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, border-color 0.08s ease, background 0.1s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stamp-option img {
+      max-width: 100%;
+      max-height: 80%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .stamp-option.active {
+      border-color: var(--main-blue);
+      background: linear-gradient(135deg, #ffffff, #d1eeff);
+      box-shadow: 0 4px 12px rgba(47, 166, 232, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .stamp-option.pressed,
+    .day-cell.pressed {
+      transform: scale(0.95);
+    }
+
+    .stamp-option.reorder-source {
+      border-style: dashed;
+      border-color: var(--accent);
+    }
+
+    .stamp-delete {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .stamp-extra {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .stamp-extra-left {
+      display: flex;
+      gap: 4px;
+    }
+
+    .stamp-hint {
+      font-size: 10px;
+      color: #6c90a8;
+      text-align: right;
+      flex: 1;
+      min-height: 14px;
+    }
+
+    .calendar-card {
+      flex: 1;
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 22px;
+      padding: 12px 10px 14px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .calendar-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at -10% 0, rgba(47, 166, 232, 0.16), transparent 60%),
+        radial-gradient(circle at 110% 100%, rgba(255, 182, 225, 0.18), transparent 60%);
+      pointer-events: none;
+    }
+
+    .month-nav {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .month-label {
+      flex: 1;
+      text-align: center;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(227, 245, 255, 0.9);
+      border: 1px solid #b5e0ff;
+    }
+
+    .month-nav button {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+    }
+
+    .month-nav button:active {
+      transform: scale(0.94);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      background: #f3f9ff;
+    }
+
+    #calendarCapture {
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
+      padding: 10px 8px 10px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--calendar-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    #calendarTitle {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #calendarTitle::before {
+      content: "🐧";
+      font-size: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 11px;
+    }
+
+    thead th {
+      padding: 4px 0;
+      font-weight: 600;
+      color: #6c90a8;
+    }
+
+    thead th:nth-child(1) {
+      color: #e46b7a;
+    }
+
+    thead th:nth-child(7) {
+      color: #3e7cb5;
+    }
+
+    tbody td {
+      border-radius: 10px;
+      padding: 2px 0 4px;
+      vertical-align: top;
+    }
+
+    .day-cell {
+      position: relative;
+      height: 46px;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+    }
+
+    .day-inner {
+      height: 100%;
+      margin: 1px 1px;
+      border-radius: 12px;
+      padding: 2px 2px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0;
+      background: linear-gradient(135deg, var(--calendar-bg1), var(--calendar-bg2));
+      box-shadow: 0 2px 4px var(--calendar-shadow-color);
+      overflow: hidden;
+    }
+
+    .day-number {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .day-stamp {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-top: 1px;
+      transition: transform 0.08s ease;
+    }
+
+    .day-stamp img {
+      max-width: 80%;
+      max-height: 80%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .day-cell.empty .day-inner {
+      background: transparent;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .day-cell.empty {
+      pointer-events: none;
+    }
+
+    .day-today .day-inner {
+      border: 1px solid var(--calendar-today-border);
+      box-shadow: 0 0 0 2px var(--calendar-today-ring);
+      position: relative;
+      background: linear-gradient(135deg, #ffffff, var(--calendar-bg1));
+    }
+
+    .day-today .day-inner::after {
+      content: "today";
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      font-size: 8px;
+      background: rgba(47, 166, 232, 0.1);
+      border-radius: 999px;
+      padding: 0 3px;
+      color: #2f7aa3;
+    }
+
+    .no-calendar-hint {
+      font-size: 12px;
+      opacity: 0.8;
+      text-align: center;
+      padding-top: 16px;
+    }
+
+    /* 進捗エリア */
+    .progress-area {
+      margin-top: 4px;
+      padding: 6px 6px 4px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(227,245,255,0.8), rgba(255,255,255,0.95));
+      border: 1px solid rgba(181,224,255,0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .progress-penguin {
+      font-size: 18px;
+    }
+
+    .progress-text-main {
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      position: relative;
+      margin-top: 2px;
+      padding: 6px 4px 2px;
+    }
+
+    .progress-track {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2px;
+      position: relative;
+    }
+
+    .progress-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      position: relative;
+    }
+
+    .progress-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(160, 200, 235, 0.6);
+    }
+
+    .progress-step.filled .progress-dot {
+      background: var(--main-blue);
+      transform: scale(1.15);
+    }
+
+    .progress-penguin-icon {
+      font-size: 16px;
+      margin-bottom: 1px;
+      transform: translateY(-4px);
+    }
+
+    .progress-rail {
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 10px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(160,200,235,0.5), rgba(160,200,235,0.1));
+      z-index: -1;
+    }
+
+    .progress-text-sub {
+      font-size: 10px;
+      text-align: right;
+      color: #5a7c96;
+    }
+
+    /* オーバーレイ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(210, 236, 255, 0.96), rgba(171, 214, 255, 0.98));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .overlay.hidden {
+      display: none;
+    }
+
+    .modal {
+      width: min(90vw, 360px);
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 18px 16px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 0 0, rgba(47, 166, 232, 0.25), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(255, 182, 225, 0.35), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .modal-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .modal-title span {
+      font-size: 24px;
+    }
+
+    .modal-text {
+      font-size: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .modal input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid #b5e0ff;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .reward-modal {
+      width: min(90vw, 360px);
+      background: linear-gradient(145deg, #ffffff, #fff6ff);
+      border-radius: 26px;
+      padding: 18px 16px 18px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reward-modal::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.9), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(255, 240, 181, 0.9), transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(181, 228, 255, 0.9), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .reward-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .chest-wrap {
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .chest {
+      width: 120px;
+      height: 80px;
+      margin: 0 auto;
+      border-radius: 18px 18px 16px 16px;
+      background: linear-gradient(180deg, #ffc25b, #ff9f2f);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      animation: chest-bounce 1s ease-in-out infinite;
+    }
+
+    .chest::before {
+      content: "";
+      position: absolute;
+      inset: 8px 10px 24px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      box-shadow: inset 0 0 0 1px rgba(208, 124, 0, 0.3);
+    }
+
+    .chest::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 8px;
+      width: 26px;
+      height: 18px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 0, #fff9d1, #e7b100);
+      box-shadow: 0 0 0 2px rgba(143, 87, 0, 0.4);
+    }
+
+    .chest-glow {
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.9), transparent 60%);
+      opacity: 0.85;
+      filter: blur(4px);
+      pointer-events: none;
+      animation: glow 1.8s ease-in-out infinite;
+    }
+
+    .sparkles {
+      position: absolute;
+      inset: -10px;
+      pointer-events: none;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, #ffffff 0, #fff0b8 40%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 1.6s linear infinite;
+    }
+
+    .sparkle.s1 { top: 10px; left: 20%; animation-delay: 0s; }
+    .sparkle.s2 { top: 0; left: 60%; animation-delay: 0.3s; }
+    .sparkle.s3 { top: 24px; right: 12%; animation-delay: 0.6s; }
+    .sparkle.s4 { bottom: 4px; left: 10%; animation-delay: 0.8s; }
+
+    .reward-message-main {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .reward-message-sub {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-bottom: 12px;
+    }
+
+    .reward-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .circle-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle at 30% 0, #ffffff 0, #2fa6e8 55%, #1b6ea4 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 10px 22px rgba(0, 100, 180, 0.65);
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.1s ease;
+    }
+
+    .circle-btn:active {
+      transform: translateY(2px) scale(0.96);
+      box-shadow: 0 5px 10px rgba(0, 70, 130, 0.7);
+      filter: brightness(0.97);
+    }
+
+    .penguin-mini {
+      position: absolute;
+      bottom: 8px;
+      right: 16px;
+      font-size: 28px;
+      transform: rotate(-6deg);
+    }
+
+    @keyframes chest-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes sparkle {
+      0%   { opacity: 0; transform: scale(0.2) translateY(6px); }
+      30%  { opacity: 1; transform: scale(1) translateY(0); }
+      70%  { opacity: 1; transform: scale(1) translateY(-6px); }
+      100% { opacity: 0; transform: scale(0.2) translateY(-10px); }
+    }
+
+    .footer-credit {
+      margin-top: 8px;
+      font-size: 10px;
+      text-align: right;
+      opacity: 0.7;
+    }
+
+    @media (max-height: 700px) {
+      .calendar-card {
+        padding: 10px 8px 12px;
+      }
+      .day-cell {
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo-circle">🐧</div>
+      <div class="title-area">
+        <div class="app-title">できたよペンギン</div>
+        <div class="app-sub">毎日の「できた！」をスタンプで記録しよう</div>
+      </div>
+    </header>
+
+    <main>
+      <div class="top-bar">
+        <div class="calendar-selector">
+          <select id="calendarSelect"></select>
+          <button class="btn sub" id="addCalendarBtn">＋</button>
+          <button class="btn sub" id="deleteCalendarBtn">削除</button>
+        </div>
+        <button class="btn" id="screenshotBtn">スクショ</button>
+      </div>
+
+      <section class="stamp-panel">
+        <div class="color-row">
+          <div class="color-label">
+            🎨 テーマカラー
+          </div>
+          <div class="theme-palette" id="themePalette"></div>
+        </div>
+        <div class="stamp-label">
+          <span>✨</span> スタンプをえらんでね（編集でカスタム）
+        </div>
+        <div class="stamp-list" id="stampList">
+          <!-- JSで生成 -->
+        </div>
+        <div class="stamp-extra">
+          <div class="stamp-extra-left">
+            <button class="btn sub tiny" id="editStampBtn">編集</button>
+            <button class="btn sub tiny" id="addStampImageBtn">＋画像スタンプ</button>
+          </div>
+          <div class="stamp-hint" id="stampHint"></div>
+        </div>
+      </section>
+
+      <section class="calendar-card">
+        <div class="month-nav">
+          <button id="prevMonthBtn">‹</button>
+          <div class="month-label" id="monthLabel">----</div>
+          <button id="nextMonthBtn">›</button>
+        </div>
+
+        <div id="calendarCapture">
+          <div id="calendarTitle">カレンダーなし</div>
+          <table>
+            <thead>
+              <tr>
+                <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+              </tr>
+            </thead>
+            <tbody id="calendarBody">
+              <!-- JSで生成 -->
+            </tbody>
+          </table>
+
+          <!-- 進捗エリア（スクショ対象） -->
+          <div id="progressArea" class="progress-area"></div>
+        </div>
+
+        <div class="no-calendar-hint" id="noCalendarHint" style="display:none;">
+          最初のカレンダーを作成すると、<br>ここにカレンダーが表示されます 🐧
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-credit">by Hayao</div>
+  </div>
+
+  <!-- 初回用オーバーレイ -->
+  <div class="overlay" id="firstCalendarOverlay">
+    <div class="modal">
+      <div class="modal-content">
+        <div class="modal-title">
+          <span>🐧</span> はじめてのカレンダー
+        </div>
+        <div class="modal-text">
+          継続したいことの名前を入力して、<br>
+          最初のカレンダーを作成しましょう。
+        </div>
+        <input type="text" id="firstCalendarName" placeholder="例）英単語、ストレッチ、おさんぽ など" />
+        <div class="modal-footer">
+          <button class="btn" id="firstCalendarCreateBtn">はじめる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ごほうびオーバーレイ -->
+  <div class="overlay hidden" id="rewardOverlay">
+    <div class="reward-modal">
+      <div class="reward-inner">
+        <div class="chest-wrap">
+          <div class="chest"></div>
+          <div class="chest-glow"></div>
+          <div class="sparkles">
+            <div class="sparkle s1"></div>
+            <div class="sparkle s2"></div>
+            <div class="sparkle s3"></div>
+            <div class="sparkle s4"></div>
+          </div>
+        </div>
+        <div class="reward-message-main" id="rewardMessageMain"></div>
+        <div class="reward-message-sub">コツコツがんばっているあなたに、<br>ペンギンからごほうびだよ 🎁</div>
+        <div class="reward-actions">
+          <button class="circle-btn" id="rewardCloseBtn">OK</button>
+          <button class="btn sub tiny" id="rewardShareBtn">スクショしてシェア</button>
+        </div>
+        <div class="penguin-mini">🐧</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクショ用ライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- 画像スタンプ用ファイル入力 -->
+  <input type="file" id="stampImageInput" accept="image/*" style="display:none;" />
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "dekitaPenguinData_v1";
+
+      // テーマプリセット（カレンダーごと）
+      const THEME_PRESETS = [
+        {
+          id: "blue",
+          main: "#2fa6e8",
+          light: "#e3f5ff",
+          accent: "#ffb6e1",
+          text: "#12415e",
+          bodyBg: "radial-gradient(circle at top, #f0fbff 0, #dff1ff 40%, #c5e7ff 100%)"
+        },
+        {
+          id: "mint",
+          main: "#27c3a6",
+          light: "#e2fff7",
+          accent: "#ffe0b5",
+          text: "#14524b",
+          bodyBg: "radial-gradient(circle at top, #e0fff7 0, #c0f2e4 40%, #a6e7da 100%)"
+        },
+        {
+          id: "lavender",
+          main: "#7f7ae5",
+          light: "#ece9ff",
+          accent: "#ffb6e8",
+          text: "#3a346d",
+          bodyBg: "radial-gradient(circle at top, #f4f0ff 0, #e3ddff 40%, #cec7ff 100%)"
+        },
+        {
+          id: "peach",
+          main: "#ff9375",
+          light: "#ffe9e1",
+          accent: "#ffe36e",
+          text: "#66352a",
+          bodyBg: "radial-gradient(circle at top, #fff3ec 0, #ffd9c9 40%, #ffc1af 100%)"
+        },
+        {
+          id: "lemon",
+          main: "#ffce3c",
+          light: "#fff8df",
+          accent: "#ffaac1",
+          text: "#665322",
+          bodyBg: "radial-gradient(circle at top, #fffce8 0, #fff1b8 40%, #ffe28c 100%)"
+        },
+        {
+          id: "sakura",
+          main: "#ff8fb7",
+          light: "#ffe6f0",
+          accent: "#ffe36e",
+          text: "#7b3950",
+          bodyBg: "radial-gradient(circle at top, #ffeef6 0, #ffd1e4 40%, #ffb6cf 100%)"
+        },
+        {
+          id: "white",
+          main: "#2fa6e8",
+          light: "#ffffff",
+          accent: "#ffb6e1",
+          text: "#333333",
+          bodyBg: "radial-gradient(circle at top, #ffffff 0, #f5f5f5 40%, #ececec 100%)",
+          calBg1: "#ffffff",
+          calBg2: "#f5f5f5",
+          calBorder: "#dddddd",
+          calShadowColor: "rgba(0,0,0,0.06)"
+        },
+        {
+          id: "gray",
+          main: "#777777",
+          light: "#f0f0f0",
+          accent: "#b0c4de",
+          text: "#333333",
+          bodyBg: "radial-gradient(circle at top, #f4f4f4 0, #e0e0e0 40%, #cfcfcf 100%)",
+          calBg1: "#f8f8f8",
+          calBg2: "#e9e9e9",
+          calBorder: "#c5c5c5",
+          calShadowColor: "rgba(0,0,0,0.08)"
+        }
+      ];
+
+      // デフォルトのスタンプ
+      const BUILTIN_STAMPS = [
+        { id: "b0", type: "emoji", emoji: "🐧" },
+        { id: "b1", type: "emoji", emoji: "❤️" },
+        { id: "b2", type: "emoji", emoji: "⭐" },
+        { id: "b3", type: "emoji", emoji: "🌈" },
+        { id: "b4", type: "emoji", emoji: "💪" }
+      ];
+
+      const state = {
+        calendars: [],
+        currentCalendarId: null,
+        currentYear: null,
+        currentMonth: null, // 0-11
+        customStamps: [], // {id, type:"image", dataUrl}
+        selectedStampId: BUILTIN_STAMPS[0].id,
+        stampOrder: [], // [stampId...]
+        reorderActive: false,
+        reorderSourceId: null,
+        editMode: false
+      };
+
+      const calendarSelect = document.getElementById("calendarSelect");
+      const addCalendarBtn = document.getElementById("addCalendarBtn");
+      const deleteCalendarBtn = document.getElementById("deleteCalendarBtn");
+      const screenshotBtn = document.getElementById("screenshotBtn");
+      const stampList = document.getElementById("stampList");
+      const monthLabel = document.getElementById("monthLabel");
+      const calendarBody = document.getElementById("calendarBody");
+      const calendarTitle = document.getElementById("calendarTitle");
+      const noCalendarHint = document.getElementById("noCalendarHint");
+      const themePalette = document.getElementById("themePalette");
+      const progressArea = document.getElementById("progressArea");
+      const stampHint = document.getElementById("stampHint");
+      const editStampBtn = document.getElementById("editStampBtn");
+
+      const prevMonthBtn = document.getElementById("prevMonthBtn");
+      const nextMonthBtn = document.getElementById("nextMonthBtn");
+
+      const firstCalendarOverlay = document.getElementById("firstCalendarOverlay");
+      const firstCalendarNameInput = document.getElementById("firstCalendarName");
+      const firstCalendarCreateBtn = document.getElementById("firstCalendarCreateBtn");
+
+      const rewardOverlay = document.getElementById("rewardOverlay");
+      const rewardMessageMain = document.getElementById("rewardMessageMain");
+      const rewardCloseBtn = document.getElementById("rewardCloseBtn");
+      const rewardShareBtn = document.getElementById("rewardShareBtn");
+
+      const stampImageInput = document.getElementById("stampImageInput");
+      const addStampImageBtn = document.getElementById("addStampImageBtn");
+
+      let lastRewardTotal = 0;
+
+      // ====== スタンプ関連ヘルパー ======
+      function buildStampMaps() {
+        const map = new Map();
+        BUILTIN_STAMPS.forEach(s => map.set(s.id, s));
+        (state.customStamps || []).forEach(s => map.set(s.id, s));
+        return map;
+      }
+
+      function ensureStampOrder() {
+        const map = buildStampMaps();
+        const allIds = Array.from(map.keys());
+        if (!Array.isArray(state.stampOrder) || state.stampOrder.length === 0) {
+          state.stampOrder = allIds.slice();
+          return;
+        }
+        let newOrder = state.stampOrder.filter(id => map.has(id));
+        allIds.forEach(id => {
+          if (!newOrder.includes(id)) newOrder.push(id);
+        });
+        state.stampOrder = newOrder;
+      }
+
+      function getAllStamps() {
+        const map = buildStampMaps();
+        ensureStampOrder();
+        return state.stampOrder
+          .map(id => map.get(id))
+          .filter(Boolean);
+      }
+
+      function findStampById(id) {
+        if (!id) return null;
+        const map = buildStampMaps();
+        return map.get(id) || null;
+      }
+
+      // ====== テーマ適用 ======
+      function applyTheme(themeId) {
+        const theme = THEME_PRESETS.find(t => t.id === themeId) || THEME_PRESETS[0];
+        const root = document.documentElement;
+        root.style.setProperty("--main-blue", theme.main);
+        root.style.setProperty("--light-blue", theme.light);
+        root.style.setProperty("--accent", theme.accent);
+        root.style.setProperty("--text-main", theme.text);
+
+        // カレンダー色
+        root.style.setProperty("--calendar-bg1", theme.calBg1 || theme.light || "#f8fbff");
+        root.style.setProperty("--calendar-bg2", theme.calBg2 || "#ffffff");
+        const borderColor = theme.calBorder || (theme.main + "33");
+        root.style.setProperty("--calendar-border", borderColor);
+        root.style.setProperty("--calendar-shadow-color", theme.calShadowColor || "rgba(160,200,235,0.4)");
+        root.style.setProperty("--calendar-today-border", theme.main);
+        const ringColor = theme.calTodayRing || (theme.main + "33");
+        root.style.setProperty("--calendar-today-ring", ringColor);
+
+        document.body.style.background = theme.bodyBg;
+        document.querySelectorAll(".theme-dot").forEach(dot => {
+          dot.classList.toggle("active", dot.dataset.themeId === theme.id);
+        });
+      }
+
+      // ====== 状態保存/読み込み ======
+      function saveState() {
+        try {
+          const toSave = {
+            calendars: state.calendars,
+            currentCalendarId: state.currentCalendarId,
+            currentYear: state.currentYear,
+            currentMonth: state.currentMonth,
+            customStamps: state.customStamps,
+            selectedStampId: state.selectedStampId,
+            stampOrder: state.stampOrder
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+        } catch (e) {
+          console.warn("ローカルストレージに保存できませんでした", e);
+        }
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          state.calendars = data.calendars || [];
+          state.currentCalendarId =
+            data.currentCalendarId ||
+            (state.calendars[0] && state.calendars[0].id) ||
+            null;
+          const now = new Date();
+          state.currentYear = data.currentYear ?? now.getFullYear();
+          state.currentMonth = data.currentMonth ?? now.getMonth();
+          state.customStamps = data.customStamps || [];
+
+          if (data.selectedStampId) {
+            state.selectedStampId = data.selectedStampId;
+          } else {
+            const idx = data.selectedStampIndex || 0;
+            state.selectedStampId = BUILTIN_STAMPS[idx]
+              ? BUILTIN_STAMPS[idx].id
+              : BUILTIN_STAMPS[0].id;
+          }
+
+          state.stampOrder = data.stampOrder || [];
+
+          state.calendars.forEach(cal => {
+            if (!cal.stamps) return;
+            Object.keys(cal.stamps).forEach(key => {
+              const v = cal.stamps[key];
+              if (typeof v === "number") {
+                const stamp = BUILTIN_STAMPS[v];
+                cal.stamps[key] = stamp ? stamp.id : BUILTIN_STAMPS[0].id;
+              }
+            });
+            if (!cal.themeId) {
+              cal.themeId = "blue";
+            }
+          });
+
+          ensureStampOrder();
+        } catch (e) {
+          console.warn("ローカルストレージから読み込みに失敗しました", e);
+        }
+      }
+
+      function getCurrentCalendar() {
+        return state.calendars.find(c => c.id === state.currentCalendarId) || null;
+      }
+
+      function setTodayMonth() {
+        const now = new Date();
+        state.currentYear = now.getFullYear();
+        state.currentMonth = now.getMonth();
+      }
+
+      function formatMonthLabel(year, month0) {
+        return year + "年 " + (month0 + 1) + "月";
+      }
+
+      function dateKey(year, month0, day) {
+        const m = String(month0 + 1).padStart(2, "0");
+        const d = String(day).padStart(2, "0");
+        return year + "-" + m + "-" + d;
+      }
+
+      function stampCount(calendar) {
+        return Object.keys(calendar.stamps || {}).length;
+      }
+
+      function addPressedAnimation(el) {
+        if (!el) return;
+        el.classList.add("pressed");
+        setTimeout(() => el.classList.remove("pressed"), 120);
+      }
+
+      // ====== カレンダー作成/削除 ======
+      function createCalendar(name) {
+        if (!name) return;
+        const newCalendar = {
+          id: Date.now() + Math.random(),
+          name: name,
+          stamps: {},
+          themeId: "blue"
+        };
+        state.calendars.push(newCalendar);
+        state.currentCalendarId = newCalendar.id;
+        setTodayMonth();
+        saveState();
+        renderAll();
+        applyTheme(newCalendar.themeId);
+      }
+
+      function deleteCurrentCalendar() {
+        const current = getCurrentCalendar();
+        if (!current) return;
+        const ok = window.confirm("「" + current.name + "」カレンダーを削除しますか？\nスタンプもすべて消えます。");
+        if (!ok) return;
+
+        state.calendars = state.calendars.filter(c => c.id !== current.id);
+        if (state.calendars.length === 0) {
+          state.currentCalendarId = null;
+          setTodayMonth();
+        } else {
+          state.currentCalendarId = state.calendars[0].id;
+          setTodayMonth();
+        }
+        saveState();
+        renderAll();
+
+        if (state.calendars.length === 0) {
+          firstCalendarOverlay.classList.remove("hidden");
+          firstCalendarNameInput.focus();
+        } else {
+          const cal = getCurrentCalendar();
+          applyTheme(cal.themeId || "blue");
+        }
+      }
+
+      // ====== テーマUI ======
+      function renderThemePalette() {
+        themePalette.innerHTML = "";
+        const current = getCurrentCalendar();
+        const currentThemeId = current ? current.themeId || "blue" : "blue";
+
+        THEME_PRESETS.forEach(theme => {
+          const dot = document.createElement("div");
+          dot.className = "theme-dot";
+          dot.dataset.themeId = theme.id;
+          dot.style.background = `linear-gradient(135deg, ${theme.light}, ${theme.main})`;
+          if (theme.id === currentThemeId) {
+            dot.classList.add("active");
+          }
+          dot.addEventListener("click", () => {
+            const cal = getCurrentCalendar();
+            if (!cal) return;
+            cal.themeId = theme.id;
+            applyTheme(theme.id);
+            saveState();
+          });
+          themePalette.appendChild(dot);
+        });
+      }
+
+      // ====== スタンプUI ======
+      function clearReorderState() {
+        state.reorderActive = false;
+        state.reorderSourceId = null;
+        document.querySelectorAll(".stamp-option").forEach(btn => {
+          btn.classList.remove("reorder-source");
+        });
+      }
+
+      function deleteStampById(stampId) {
+        if (BUILTIN_STAMPS.some(s => s.id === stampId)) return;
+        const stamp = state.customStamps.find(s => s.id === stampId);
+        if (!stamp) return;
+
+        const ok = window.confirm("このスタンプを削除しますか？\nカレンダー上の同じスタンプも消えます。");
+        if (!ok) return;
+
+        state.customStamps = state.customStamps.filter(s => s.id !== stampId);
+        state.stampOrder = (state.stampOrder || []).filter(id => id !== stampId);
+
+        state.calendars.forEach(cal => {
+          if (!cal.stamps) return;
+          Object.keys(cal.stamps).forEach(key => {
+            if (cal.stamps[key] === stampId) {
+              delete cal.stamps[key];
+            }
+          });
+        });
+
+        if (state.selectedStampId === stampId) {
+          state.selectedStampId = BUILTIN_STAMPS[0].id;
+        }
+
+        clearReorderState();
+        saveState();
+        renderStampOptions();
+        updateStampEditUI();
+        renderCalendar();
+      }
+
+      function renderStampOptions() {
+        ensureStampOrder();
+        stampList.innerHTML = "";
+        const allStamps = getAllStamps();
+
+        allStamps.forEach(stamp => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "stamp-option" + (stamp.id === state.selectedStampId ? " active" : "");
+          btn.dataset.stampId = stamp.id;
+
+          if (stamp.type === "emoji") {
+            btn.textContent = stamp.emoji;
+          } else if (stamp.type === "image") {
+            const img = document.createElement("img");
+            img.src = stamp.dataUrl;
+            img.alt = "stamp";
+            btn.appendChild(img);
+
+            const del = document.createElement("div");
+            del.className = "stamp-delete";
+            del.textContent = "×";
+            del.style.display = state.editMode ? "flex" : "none";
+            del.addEventListener("click", (e) => {
+              e.stopPropagation();
+              if (!state.editMode) return;
+              deleteStampById(stamp.id);
+            });
+            btn.appendChild(del);
+          }
+
+          let longPressTimer = null;
+          const longPressDuration = 500;
+
+          btn.addEventListener("pointerdown", (e) => {
+            if (!state.editMode) return;
+            if (e.pointerType === "mouse" && e.button !== 0) return;
+            clearTimeout(longPressTimer);
+            longPressTimer = setTimeout(() => {
+              state.reorderActive = true;
+              state.reorderSourceId = stamp.id;
+              document.querySelectorAll(".stamp-option").forEach(b => b.classList.remove("reorder-source"));
+              btn.classList.add("reorder-source");
+              stampHint.textContent = "入れ替えたいスタンプをタップしてね";
+            }, longPressDuration);
+          });
+
+          function cancelLongPress() {
+            clearTimeout(longPressTimer);
+          }
+
+          btn.addEventListener("pointerup", cancelLongPress);
+          btn.addEventListener("pointercancel", cancelLongPress);
+          btn.addEventListener("pointerleave", cancelLongPress);
+
+          btn.addEventListener("click", () => {
+            const id = stamp.id;
+
+            if (state.editMode && state.reorderActive) {
+              const sourceId = state.reorderSourceId;
+              if (!sourceId) {
+                clearReorderState();
+                updateStampEditUI();
+                return;
+              }
+              if (sourceId === id) {
+                clearReorderState();
+                updateStampEditUI();
+                return;
+              }
+              const fromIndex = state.stampOrder.indexOf(sourceId);
+              const toIndex = state.stampOrder.indexOf(id);
+              if (fromIndex >= 0 && toIndex >= 0) {
+                const tmp = state.stampOrder[fromIndex];
+                state.stampOrder[fromIndex] = state.stampOrder[toIndex];
+                state.stampOrder[toIndex] = tmp;
+                saveState();
+                clearReorderState();
+                renderStampOptions();
+                updateStampEditUI();
+              }
+              return;
+            }
+
+            state.selectedStampId = id;
+            document.querySelectorAll(".stamp-option").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            addPressedAnimation(btn);
+            saveState();
+          });
+
+          stampList.appendChild(btn);
+        });
+      }
+
+      function updateStampEditUI() {
+        if (!editStampBtn) return;
+        if (state.editMode) {
+          editStampBtn.textContent = "編集完了";
+          addStampImageBtn.style.display = "inline-flex";
+          if (!state.reorderActive) {
+            stampHint.textContent = "画像スタンプの追加・並び替え・削除ができます";
+          }
+        } else {
+          editStampBtn.textContent = "編集";
+          addStampImageBtn.style.display = "none";
+          clearReorderState();
+          stampHint.textContent = "タップしてスタンプを選べるよ";
+        }
+      }
+
+      function renderCalendarSelect() {
+        calendarSelect.innerHTML = "";
+        if (state.calendars.length === 0) {
+          const opt = document.createElement("option");
+          opt.value = "";
+          opt.textContent = "カレンダーなし";
+          calendarSelect.appendChild(opt);
+          calendarSelect.disabled = true;
+          deleteCalendarBtn.disabled = true;
+        } else {
+          calendarSelect.disabled = false;
+          deleteCalendarBtn.disabled = false;
+
+          state.calendars.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = String(c.id);
+            opt.textContent = c.name;
+            calendarSelect.appendChild(opt);
+          });
+          calendarSelect.value = String(state.currentCalendarId);
+        }
+      }
+
+      // ====== 進捗UI ======
+      function renderProgress(calendar) {
+        const total = stampCount(calendar);
+        const inCycle = total % 15;
+        const cycleSteps = 15;
+        const nextMilestone = total === 0 ? 15 : Math.floor(total / 15 + 1) * 15;
+        const remaining = nextMilestone - total;
+
+        let html = "";
+        html += '<div class="progress-header">';
+        html += '<span class="progress-penguin">🐧</span>';
+        html += '<span class="progress-text-main">通算 ' + total + ' 回できたよ</span>';
+        html += "</div>";
+
+        html += '<div class="progress-bar">';
+        html += '<div class="progress-rail"></div>';
+        html += '<div class="progress-track">';
+
+        for (let i = 1; i <= cycleSteps; i++) {
+          const filled = inCycle === 0 ? false : i <= inCycle;
+          const isPenguin = (inCycle === 0 && i === 1) || (inCycle > 0 && i === inCycle);
+          html += '<div class="progress-step' + (filled ? " filled" : "") + '">';
+          if (isPenguin) {
+            html += '<div class="progress-penguin-icon">🐧</div>';
+          } else {
+            html += '<div style="height:16px;"></div>';
+          }
+          html += '<div class="progress-dot"></div>';
+          html += "</div>";
+        }
+
+        html += "</div></div>";
+
+        if (remaining > 0) {
+          html += '<div class="progress-text-sub">ごほうびまであと ' + remaining + " 回</div>";
+        } else {
+          html += '<div class="progress-text-sub">ごほうびゲット！ つぎの宝箱まであと 15 回</div>';
+        }
+
+        progressArea.innerHTML = html;
+      }
+
+      function renderCalendar() {
+        const cal = getCurrentCalendar();
+        const hasCalendar = !!cal;
+
+        noCalendarHint.style.display = hasCalendar ? "none" : "block";
+        calendarTitle.textContent = hasCalendar ? cal.name : "カレンダーなし";
+        monthLabel.textContent = formatMonthLabel(state.currentYear, state.currentMonth);
+
+        calendarBody.innerHTML = "";
+        progressArea.innerHTML = "";
+
+        if (!hasCalendar) {
+          return;
+        }
+
+        const year = state.currentYear;
+        const month0 = state.currentMonth;
+        const firstDay = new Date(year, month0, 1).getDay();
+        const daysInMonth = new Date(year, month0 + 1, 0).getDate();
+
+        const today = new Date();
+        const isCurrentMonth = (today.getFullYear() === year && today.getMonth() === month0);
+
+        let dayNum = 1;
+        for (let week = 0; week < 6; week++) {
+          const tr = document.createElement("tr");
+
+          for (let dow = 0; dow < 7; dow++) {
+            const td = document.createElement("td");
+            const inner = document.createElement("div");
+            inner.className = "day-inner";
+
+            if (week === 0 && dow < firstDay || dayNum > daysInMonth) {
+              td.className = "day-cell empty";
+              td.appendChild(inner);
+            } else {
+              td.className = "day-cell";
+              td.dataset.day = String(dayNum);
+
+              const number = document.createElement("div");
+              number.className = "day-number";
+              number.textContent = String(dayNum);
+
+              const stampEl = document.createElement("div");
+              stampEl.className = "day-stamp";
+
+              const key = dateKey(year, month0, dayNum);
+              const stampId = cal.stamps[key];
+              const stamp = findStampById(stampId);
+
+              if (stamp) {
+                if (stamp.type === "emoji") {
+                  stampEl.textContent = stamp.emoji;
+                } else if (stamp.type === "image") {
+                  const img = document.createElement("img");
+                  img.src = stamp.dataUrl;
+                  img.alt = "stamp";
+                  stampEl.appendChild(img);
+                }
+              }
+
+              inner.appendChild(number);
+              inner.appendChild(stampEl);
+
+              if (isCurrentMonth && dayNum === today.getDate()) {
+                td.classList.add("day-today");
+              }
+
+              td.appendChild(inner);
+              dayNum++;
+            }
+
+            tr.appendChild(td);
+          }
+
+          calendarBody.appendChild(tr);
+          if (dayNum > daysInMonth) break;
+        }
+
+        renderProgress(cal);
+      }
+
+      function renderAll() {
+        renderThemePalette();
+        renderStampOptions();
+        renderCalendarSelect();
+        renderCalendar();
+
+        const cal = getCurrentCalendar();
+        applyTheme(cal ? cal.themeId || "blue" : "blue");
+        updateStampEditUI();
+      }
+
+      // ====== スタンプ操作 ======
+      function handleDayClick(e) {
+        const cell = e.target.closest(".day-cell");
+        if (!cell || cell.classList.contains("empty")) return;
+
+        const dayStr = cell.dataset.day;
+        if (!dayStr) return;
+
+        addPressedAnimation(cell);
+
+        const cal = getCurrentCalendar();
+        if (!cal) return;
+
+        const day = Number(dayStr);
+        const year = state.currentYear;
+        const month0 = state.currentMonth;
+        const key = dateKey(year, month0, day);
+
+        const beforeCount = stampCount(cal);
+        const currentStampId = cal.stamps[key];
+        const selectedId = state.selectedStampId;
+        if (!selectedId) return;
+
+        if (currentStampId === selectedId) {
+          delete cal.stamps[key];
+        } else if (currentStampId) {
+          cal.stamps[key] = selectedId;
+        } else {
+          cal.stamps[key] = selectedId;
+        }
+
+        const afterCount = stampCount(cal);
+
+        if (Math.floor(afterCount / 15) > Math.floor(beforeCount / 15)) {
+          showReward(afterCount);
+        }
+
+        saveState();
+        renderCalendar();
+      }
+
+      // ====== 宝箱モーダル ======
+      function showReward(total) {
+        lastRewardTotal = total;
+        rewardMessageMain.textContent = total + "回できたね！ごほうびをゲット 🎉";
+        rewardOverlay.classList.remove("hidden");
+      }
+
+      function closeReward() {
+        rewardOverlay.classList.add("hidden");
+      }
+
+      async function shareReward(total) {
+        const target = document.getElementById("calendarCapture");
+        if (!target || typeof html2canvas === "undefined") {
+          alert("スクリーンショット機能を読み込めませんでした。");
+          return;
+        }
+
+        addPressedAnimation(rewardShareBtn);
+
+        const cal = getCurrentCalendar();
+        const name = cal ? cal.name : "カレンダー";
+        const text = `「${name}」を${total}回できたよ！ #できたよペンギン`;
+
+        const canvas = await html2canvas(target, {
+          scale: 2,
+          backgroundColor: "#ffffff"
+        });
+
+        canvas.toBlob(async (blob) => {
+          if (!blob) return;
+          const now = new Date();
+          const yyyy = now.getFullYear();
+          const mm = String(now.getMonth() + 1).padStart(2, "0");
+          const dd = String(now.getDate()).padStart(2, "0");
+          const fileName = name + "_" + yyyy + mm + dd + ".png";
+
+          try {
+            if (navigator.canShare && window.File) {
+              const file = new File([blob], fileName, { type: "image/png" });
+              const shareData = { files: [file], text };
+              if (navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                return;
+              }
+            }
+
+            if (navigator.share) {
+              await navigator.share({ text });
+            }
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(text);
+              alert("スクショを保存しました！\n投稿用メッセージもコピーしました。");
+            } else {
+              alert("スクショを保存しました！\n投稿文:\n" + text);
+            }
+          } catch (err) {
+            console.log(err);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+            alert("共有に失敗しましたが、スクショを保存しました。\n投稿文:\n" + text);
+          }
+        });
+      }
+
+      // ====== スクショ ======
+      function captureScreenshot() {
+        const target = document.getElementById("calendarCapture");
+        if (!target || typeof html2canvas === "undefined") {
+          alert("スクリーンショット機能を読み込めませんでした。");
+          return;
+        }
+
+        addPressedAnimation(screenshotBtn);
+
+        const cal = getCurrentCalendar();
+        const name = cal ? cal.name : "calendar";
+
+        html2canvas(target, {
+          scale: 2,
+          backgroundColor: "#ffffff"
+        }).then(canvas => {
+          canvas.toBlob(function (blob) {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, "0");
+            const dd = String(now.getDate()).padStart(2, "0");
+            a.href = url;
+            a.download = name + "_" + yyyy + mm + dd + ".png";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+          });
+        });
+      }
+
+      // ====== 画像スタンプ追加 ======
+      function handleAddStampImage() {
+        if (!state.editMode) return;
+        addPressedAnimation(addStampImageBtn);
+        stampImageInput.value = "";
+        stampImageInput.click();
+      }
+
+      function handleStampImageChange() {
+        const file = stampImageInput.files && stampImageInput.files[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+          alert("画像ファイルを選択してください。");
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const dataUrl = e.target.result;
+          const id = "c_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+          const stamp = {
+            id,
+            type: "image",
+            dataUrl
+          };
+          state.customStamps.push(stamp);
+          ensureStampOrder();
+          state.stampOrder.push(id);
+          state.selectedStampId = id;
+          saveState();
+          renderStampOptions();
+          updateStampEditUI();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // ====== イベント登録 ======
+      function attachEvents() {
+        calendarBody.addEventListener("click", handleDayClick);
+
+        prevMonthBtn.addEventListener("click", () => {
+          state.currentMonth -= 1;
+          if (state.currentMonth < 0) {
+            state.currentMonth = 11;
+            state.currentYear -= 1;
+          }
+          saveState();
+          renderCalendar();
+          addPressedAnimation(prevMonthBtn);
+        });
+
+        nextMonthBtn.addEventListener("click", () => {
+          state.currentMonth += 1;
+          if (state.currentMonth > 11) {
+            state.currentMonth = 0;
+            state.currentYear += 1;
+          }
+          saveState();
+          renderCalendar();
+          addPressedAnimation(nextMonthBtn);
+        });
+
+        addCalendarBtn.addEventListener("click", () => {
+          const name = window.prompt("新しいカレンダーの名前を入力してください", "");
+          if (name && name.trim()) {
+            createCalendar(name.trim());
+          }
+          addPressedAnimation(addCalendarBtn);
+        });
+
+        deleteCalendarBtn.addEventListener("click", () => {
+          deleteCurrentCalendar();
+        });
+
+        calendarSelect.addEventListener("change", () => {
+          const id = Number(calendarSelect.value);
+          if (!id) return;
+          state.currentCalendarId = id;
+          setTodayMonth();
+          saveState();
+          renderCalendar();
+          const cal = getCurrentCalendar();
+          applyTheme(cal ? cal.themeId || "blue" : "blue");
+        });
+
+        screenshotBtn.addEventListener("click", captureScreenshot);
+
+        firstCalendarCreateBtn.addEventListener("click", () => {
+          const name = firstCalendarNameInput.value.trim();
+          if (!name) {
+            alert("カレンダー名を入力してください。");
+            firstCalendarNameInput.focus();
+            return;
+          }
+          createCalendar(name);
+          firstCalendarOverlay.classList.add("hidden");
+        });
+
+        firstCalendarNameInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            firstCalendarCreateBtn.click();
+          }
+        });
+
+        rewardCloseBtn.addEventListener("click", () => {
+          closeReward();
+        });
+
+        rewardOverlay.addEventListener("click", (e) => {
+          if (e.target === rewardOverlay) {
+            closeReward();
+          }
+        });
+
+        rewardShareBtn.addEventListener("click", () => {
+          if (lastRewardTotal > 0) {
+            shareReward(lastRewardTotal);
+          }
+        });
+
+        addStampImageBtn.addEventListener("click", handleAddStampImage);
+        stampImageInput.addEventListener("change", handleStampImageChange);
+
+        editStampBtn.addEventListener("click", () => {
+          state.editMode = !state.editMode;
+          if (!state.editMode) {
+            clearReorderState();
+          }
+          renderStampOptions();
+          updateStampEditUI();
+        });
+      }
+
+      // ====== 初期化 ======
+      function init() {
+        const now = new Date();
+        state.currentYear = now.getFullYear();
+        state.currentMonth = now.getMonth();
+
+        loadState();
+        renderAll();
+
+        if (state.calendars.length > 0) {
+          firstCalendarOverlay.classList.add("hidden");
+        } else {
+          firstCalendarOverlay.classList.remove("hidden");
+          setTimeout(() => firstCalendarNameInput.focus(), 300);
+        }
+
+        attachEvents();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
