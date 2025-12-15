@@ -5,7 +5,7 @@
   <title>できたよペンギン</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- PWA / アイコン周り -->
+  <!-- PWA / アイコン -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2fa6e8">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -32,10 +32,7 @@
       --calendar-today-ring: rgba(47, 166, 232, 0.2);
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -51,7 +48,7 @@
       width: 100%;
       max-width: 480px;
       min-height: 100vh;
-      padding: 16px 14px 20px; /* 下の余白を少し減らした */
+      padding: 16px 14px 18px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -68,7 +65,7 @@
       backdrop-filter: blur(12px);
     }
 
-    /* 左上アイコン：四隅だけアール・トリミングなし */
+    /* 左上アイコン：四隅だけアール（トリミングなし） */
     .logo-circle {
       width: 40px;
       height: 40px;
@@ -81,7 +78,6 @@
       padding: 0;
       flex-shrink: 0;
     }
-
     .logo-circle img {
       width: 100%;
       height: 100%;
@@ -89,21 +85,9 @@
       display: block;
     }
 
-    .title-area {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-
-    .app-title {
-      font-weight: 700;
-      font-size: 18px;
-    }
-
-    .app-sub {
-      font-size: 11px;
-      opacity: 0.8;
-    }
+    .title-area { display: flex; flex-direction: column; line-height: 1.2; }
+    .app-title { font-weight: 700; font-size: 18px; }
+    .app-sub { font-size: 11px; opacity: 0.8; }
 
     main {
       display: flex;
@@ -113,11 +97,7 @@
       min-height: 0;
     }
 
-    .top-bar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    .top-bar { display: flex; gap: 8px; align-items: center; }
 
     .calendar-selector {
       flex: 1;
@@ -133,9 +113,7 @@
     #calendarSelect {
       flex: 1;
       border-radius: 999px;
-      border-color: #b5e0ff;
-      border-style: solid;
-      border-width: 1px;
+      border: 1px solid #b5e0ff;
       padding: 6px 10px;
       font-size: 13px;
       background: #ffffff;
@@ -158,6 +136,7 @@
       gap: 4px;
       transform: translateY(0);
       transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+      white-space: nowrap;
     }
 
     .btn.sub {
@@ -166,10 +145,7 @@
       box-shadow: 0 3px 8px rgba(77, 181, 238, 0.4);
     }
 
-    .btn.tiny {
-      padding: 4px 8px;
-      font-size: 11px;
-    }
+    .btn.tiny { padding: 4px 8px; font-size: 11px; }
 
     .btn:active {
       transform: translateY(1px) scale(0.97);
@@ -177,12 +153,7 @@
       filter: brightness(0.97);
     }
 
-    #screenshotBtn {
-      width: 72px;
-      font-size: 10px;
-      padding-inline: 6px;
-      white-space: nowrap;
-    }
+    #screenshotBtn { width: 72px; font-size: 10px; padding-inline: 6px; }
 
     .stamp-panel {
       background: rgba(255, 255, 255, 0.95);
@@ -201,12 +172,7 @@
       gap: 8px;
     }
 
-    .color-label {
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .color-label { font-size: 11px; display: flex; align-items: center; gap: 4px; }
 
     .theme-palette {
       display: flex;
@@ -242,20 +208,10 @@
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
     }
 
-    .theme-dot.active::after {
-      opacity: 1;
-    }
+    .theme-dot.active::after { opacity: 1; }
 
-    .stamp-label {
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .stamp-label span {
-      font-size: 16px;
-    }
+    .stamp-label { font-size: 12px; display: flex; align-items: center; gap: 6px; }
+    .stamp-label span { font-size: 16px; }
 
     .stamp-list {
       display: flex;
@@ -265,16 +221,9 @@
       padding-bottom: 4px;
     }
 
-    .stamp-list::-webkit-scrollbar {
-      height: 4px;
-    }
-    .stamp-list::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .stamp-list::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.18);
-      border-radius: 999px;
-    }
+    .stamp-list::-webkit-scrollbar { height: 4px; }
+    .stamp-list::-webkit-scrollbar-track { background: transparent; }
+    .stamp-list::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.18); border-radius: 999px; }
 
     .stamp-option {
       flex: 0 0 56px;
@@ -293,12 +242,7 @@
       position: relative;
     }
 
-    .stamp-option img {
-      max-width: 100%;
-      max-height: 80%;
-      object-fit: contain;
-      display: block;
-    }
+    .stamp-option img { max-width: 100%; max-height: 80%; object-fit: contain; display: block; }
 
     .stamp-option.active {
       border-color: var(--main-blue);
@@ -307,15 +251,8 @@
       transform: translateY(-1px);
     }
 
-    .stamp-option.pressed,
-    .day-cell.pressed {
-      transform: scale(0.95);
-    }
-
-    .stamp-option.reorder-source {
-      border-style: dashed;
-      border-color: var(--accent);
-    }
+    .stamp-option.pressed, .day-cell.pressed { transform: scale(0.95); }
+    .stamp-option.reorder-source { border-style: dashed; border-color: var(--accent); }
 
     .stamp-delete {
       position: absolute;
@@ -341,23 +278,10 @@
       gap: 6px;
       margin-top: 2px;
     }
-
-    .stamp-extra-left {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
-
-    .stamp-hint {
-      font-size: 10px;
-      color: #6c90a8;
-      text-align: right;
-      flex: 1;
-      min-height: 14px;
-    }
+    .stamp-extra-left { display: flex; gap: 4px; flex-wrap: wrap; }
+    .stamp-hint { font-size: 10px; color: #6c90a8; text-align: right; flex: 1; min-height: 14px; }
 
     .calendar-card {
-      /* 伸ばさず、中身に合わせて高さが決まるように変更 */
       flex: 0 0 auto;
       background: rgba(255, 255, 255, 0.98);
       border-radius: 22px;
@@ -441,45 +365,15 @@
       align-items: center;
       gap: 6px;
     }
+    #calendarTitle::before { content: "🗓️"; font-size: 16px; }
 
-    #calendarTitle::before {
-      content: "🐧";
-      font-size: 18px;
-    }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px; }
+    thead th { padding: 4px 0; font-weight: 600; color: #6c90a8; }
+    thead th:nth-child(1) { color: #e46b7a; }
+    thead th:nth-child(7) { color: #3e7cb5; }
+    tbody td { border-radius: 10px; padding: 1px 0 3px; vertical-align: top; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      font-size: 11px;
-    }
-
-    thead th {
-      padding: 4px 0;
-      font-weight: 600;
-      color: #6c90a8;
-    }
-
-    thead th:nth-child(1) {
-      color: #e46b7a;
-    }
-
-    thead th:nth-child(7) {
-      color: #3e7cb5;
-    }
-
-    tbody td {
-      border-radius: 10px;
-      padding: 1px 0 3px;
-      vertical-align: top;
-    }
-
-    .day-cell {
-      position: relative;
-      height: 44px;
-      cursor: pointer;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
-    }
+    .day-cell { position: relative; height: 44px; cursor: pointer; transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease; }
 
     .day-inner {
       position: relative;
@@ -516,22 +410,10 @@
       pointer-events: none;
     }
 
-    .day-stamp img {
-      max-width: 70%;
-      max-height: 70%;
-      object-fit: contain;
-      display: block;
-    }
+    .day-stamp img { max-width: 70%; max-height: 70%; object-fit: contain; display: block; }
 
-    .day-cell.empty .day-inner {
-      background: transparent;
-      box-shadow: none;
-      cursor: default;
-    }
-
-    .day-cell.empty {
-      pointer-events: none;
-    }
+    .day-cell.empty .day-inner { background: transparent; box-shadow: none; cursor: default; }
+    .day-cell.empty { pointer-events: none; }
 
     .day-today .day-inner {
       border: 1px solid var(--calendar-today-border);
@@ -540,6 +422,7 @@
       background: linear-gradient(135deg, #ffffff, var(--calendar-bg1));
     }
 
+    /* 今日ラベル：日付/スタンプと被りにくい位置（右上） */
     .day-today .day-inner::after {
       content: "今日";
       position: absolute;
@@ -554,12 +437,21 @@
       pointer-events: none;
     }
 
-    .no-calendar-hint {
-      font-size: 12px;
-      opacity: 0.8;
-      text-align: center;
-      padding-top: 16px;
+    /* メモありインジケータ（小さな点） */
+    .memo-dot {
+      position: absolute;
+      bottom: 4px;
+      left: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--main-blue);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.85);
+      opacity: 0.9;
+      pointer-events: none;
     }
+
+    .no-calendar-hint { font-size: 12px; opacity: 0.8; text-align: center; padding-top: 16px; }
 
     /* 進捗エリア */
     .progress-area {
@@ -581,94 +473,31 @@
       flex-wrap: wrap;
     }
 
-    .progress-penguin {
-      font-size: 18px;
-    }
+    .progress-penguin { font-size: 18px; }
+    .progress-text-main { font-weight: 600; }
+    .progress-text-sub-small { font-size: 10px; color: #5a7c96; }
 
-    .progress-text-main {
-      font-weight: 600;
-    }
+    .progress-bar { margin-top: 2px; }
+    .progress-scroll { position: relative; overflow-x: auto; padding: 4px 0 2px; }
+    .progress-scroll::-webkit-scrollbar { height: 4px; }
+    .progress-scroll::-webkit-scrollbar-track { background: transparent; }
+    .progress-scroll::-webkit-scrollbar-thumb { background: rgba(160, 200, 235, 0.7); border-radius: 999px; }
 
-    .progress-text-sub-small {
-      font-size: 10px;
-      color: #5a7c96;
-    }
-
-    .progress-bar {
-      margin-top: 2px;
-    }
-
-    .progress-scroll {
-      position: relative;
-      overflow-x: auto;
-      padding: 4px 0 2px;
-    }
-
-    .progress-scroll::-webkit-scrollbar {
-      height: 4px;
-    }
-    .progress-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .progress-scroll::-webkit-scrollbar-thumb {
-      background: rgba(160, 200, 235, 0.7);
-      border-radius: 999px;
-    }
-
-    .progress-track {
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      padding: 0 4px;
-    }
-
+    .progress-track { position: relative; display: flex; align-items: flex-end; gap: 4px; padding: 0 4px; }
     .progress-rail {
-      position: absolute;
-      left: 4px;
-      right: 4px;
-      top: 50%;
-      height: 2px;
-      transform: translateY(-50%);
+      position: absolute; left: 4px; right: 4px; top: 50%;
+      height: 2px; transform: translateY(-50%);
       background: linear-gradient(90deg, rgba(160,200,235,0.5), rgba(160,200,235,0.1));
       z-index: -1;
     }
 
-    .progress-step {
-      flex: 0 0 auto;
-      width: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      position: relative;
-    }
+    .progress-step { flex: 0 0 auto; width: 14px; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .progress-dot { width: 6px; height: 6px; border-radius: 999px; background: rgba(160, 200, 235, 0.6); }
+    .progress-step.filled .progress-dot { background: var(--main-blue); transform: scale(1.15); }
+    .progress-penguin-icon { font-size: 16px; margin-bottom: 1px; transform: translateY(-4px); }
+    .progress-text-sub { font-size: 10px; text-align: right; color: #5a7c96; }
 
-    .progress-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(160, 200, 235, 0.6);
-    }
-
-    .progress-step.filled .progress-dot {
-      background: var(--main-blue);
-      transform: scale(1.15);
-    }
-
-    .progress-penguin-icon {
-      font-size: 16px;
-      margin-bottom: 1px;
-      transform: translateY(-4px);
-    }
-
-    .progress-text-sub {
-      font-size: 10px;
-      text-align: right;
-      color: #5a7c96;
-    }
-
-    /* 初回オーバーレイ */
+    /* オーバーレイ */
     .overlay {
       position: fixed;
       inset: 0;
@@ -678,10 +507,7 @@
       justify-content: center;
       z-index: 20;
     }
-
-    .overlay.hidden {
-      display: none;
-    }
+    .overlay.hidden { display: none; }
 
     .modal {
       width: min(90vw, 360px);
@@ -704,10 +530,7 @@
       pointer-events: none;
     }
 
-    .modal-content {
-      position: relative;
-      z-index: 1;
-    }
+    .modal-content { position: relative; z-index: 1; }
 
     .modal-title {
       font-size: 16px;
@@ -718,40 +541,15 @@
       margin-bottom: 8px;
     }
 
-    .modal-title span {
-      font-size: 24px;
-    }
+    .modal-title span { font-size: 24px; }
 
-    .modal-text {
-      font-size: 12px;
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
+    .modal-text { font-size: 12px; margin-bottom: 8px; line-height: 1.5; }
 
-    /* 注意書きと入力欄を分けるための装飾 */
-    .modal-divider {
-      border-top: 1px dashed rgba(181,224,255,0.9);
-      margin: 8px 0 10px;
-    }
+    .modal-divider { border-top: 1px dashed rgba(181,224,255,0.9); margin: 8px 0 10px; }
+    .modal-section-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .modal-section-title span { font-size: 14px; }
 
-    .modal-section-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .modal-section-title span {
-      font-size: 14px;
-    }
-
-    .modal label {
-      display: block;
-      font-size: 11px;
-      margin-bottom: 10px;
-    }
+    .modal label { display: block; font-size: 11px; margin-bottom: 10px; }
 
     .reward-input-note {
       display: block;
@@ -760,8 +558,7 @@
       margin-top: 2px;
     }
 
-    .modal input[type="text"],
-    .modal input[type="number"] {
+    .modal input[type="text"], .modal input[type="number"] {
       width: 100%;
       border-radius: 999px;
       border: 1px solid #b5e0ff;
@@ -770,12 +567,9 @@
       margin-top: 4px;
     }
 
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-    }
+    .modal-footer { display: flex; justify-content: flex-end; }
 
-    /* ごほうびオーバーレイ：余裕レイアウト＋OK控えめ */
+    /* ごほうび */
     .reward-modal {
       width: min(90vw, 360px);
       background: linear-gradient(145deg, #ffffff, #fff6ff);
@@ -798,16 +592,8 @@
       pointer-events: none;
     }
 
-    .reward-inner {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-    }
-
-    .chest-wrap {
-      margin-top: 2px;
-      margin-bottom: 14px;
-    }
+    .reward-inner { position: relative; z-index: 1; text-align: center; }
+    .chest-wrap { margin-top: 2px; margin-bottom: 14px; }
 
     .chest {
       width: 120px;
@@ -846,19 +632,14 @@
     .chest-glow {
       position: absolute;
       inset: -40%;
-      background:
-        radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.9), transparent 60%);
+      background: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.9), transparent 60%);
       opacity: 0.85;
       filter: blur(4px);
       pointer-events: none;
       animation: glow 1.8s ease-in-out infinite;
     }
 
-    .sparkles {
-      position: absolute;
-      inset: -10px;
-      pointer-events: none;
-    }
+    .sparkles { position: absolute; inset: -10px; pointer-events: none; }
 
     .sparkle {
       position: absolute;
@@ -875,23 +656,9 @@
     .sparkle.s3 { top: 24px; right: 12%; animation-delay: 0.6s; }
     .sparkle.s4 { bottom: 4px; left: 10%; animation-delay: 0.8s; }
 
-    .reward-message-main {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .reward-message-sub {
-      font-size: 12px;
-      opacity: 0.9;
-      margin-bottom: 4px;
-    }
-
-    .reward-message-sub2 {
-      font-size: 11px;
-      opacity: 0.9;
-      margin-bottom: 10px;
-    }
+    .reward-message-main { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .reward-message-sub { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+    .reward-message-sub2 { font-size: 11px; opacity: 0.9; margin-bottom: 10px; }
 
     .reward-actions {
       display: flex;
@@ -901,6 +668,7 @@
       margin-top: 6px;
     }
 
+    /* OKは控えめ */
     .circle-btn {
       border-radius: 999px;
       border: none;
@@ -927,39 +695,143 @@
       right: 16px;
       font-size: 26px;
       transform: rotate(-6deg);
+      opacity: 0.9;
     }
 
-    @keyframes chest-bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-
-    @keyframes glow {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-
+    @keyframes chest-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes glow { 0%,100%{opacity:0.7} 50%{opacity:1} }
     @keyframes sparkle {
-      0%   { opacity: 0; transform: scale(0.2) translateY(6px); }
-      30%  { opacity: 1; transform: scale(1) translateY(0); }
-      70%  { opacity: 1; transform: scale(1) translateY(-6px); }
-      100% { opacity: 0; transform: scale(0.2) translateY(-10px); }
+      0%{opacity:0;transform:scale(0.2) translateY(6px)}
+      30%{opacity:1;transform:scale(1) translateY(0)}
+      70%{opacity:1;transform:scale(1) translateY(-6px)}
+      100%{opacity:0;transform:scale(0.2) translateY(-10px)}
     }
 
-    .footer-credit {
-      margin-top: 8px;
-      font-size: 10px;
-      text-align: right;
-      opacity: 0.7;
-    }
+    .footer-credit { margin-top: 8px; font-size: 10px; text-align: right; opacity: 0.7; }
 
     @media (max-height: 700px) {
-      .calendar-card {
-        padding: 8px 8px 10px;
-      }
-      .day-cell {
-        height: 42px;
-      }
+      .calendar-card { padding: 8px 8px 10px; }
+      .day-cell { height: 42px; }
+    }
+
+    /* === メモモーダル（追加） === */
+    .memo-modal { width: min(92vw, 390px); border-radius: 24px; }
+    .memo-title { align-items: flex-start; }
+    .memo-title-text { display:flex; flex-direction:column; gap:2px; }
+    .memo-sub { font-size: 10px; opacity: 0.7; }
+
+    .memo-nav-row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap:8px;
+      margin: 6px 0 4px;
+    }
+    .memo-date-pill{
+      flex:1;
+      text-align:center;
+      font-size:13px;
+      font-weight:700;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(227,245,255,0.85);
+      border: 1px solid rgba(181,224,255,0.9);
+    }
+
+    .memo-stamp-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 0 10px;
+    }
+
+    .memo-stamp-preview {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(181,224,255,0.9);
+      background: linear-gradient(135deg, rgba(227,245,255,0.7), rgba(255,255,255,0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      overflow: hidden;
+    }
+
+    .memo-stamp-preview img { max-width: 80%; max-height: 80%; object-fit: contain; display: block; }
+
+    .memo-label { display:block; font-size:11px; margin-bottom: 10px; }
+    #memoTextArea {
+      width: 100%;
+      margin-top: 6px;
+      border-radius: 16px;
+      border: 1px solid #b5e0ff;
+      padding: 10px 12px;
+      font-size: 13px;
+      min-height: 150px;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    .memo-footer {
+      display:flex;
+      justify-content: space-between;
+      gap:8px;
+      align-items:center;
+      margin-top: 8px;
+    }
+/* === メモ：テーマカラーに合わせる === */
+.memo-modal {
+  background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(227,245,255,0.55));
+  border: 1px solid rgba(181,224,255,0.85);
+}
+
+.memo-date-pill{
+  background: rgba(227,245,255,0.75);
+  border: 1px solid rgba(181,224,255,0.9);
+  color: var(--text-main);
+}
+
+/* 目立たせないボタン（前日/翌日・閉じる用） */
+.btn.ghost {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid rgba(181,224,255,0.9);
+  box-shadow: none;
+}
+.btn.ghost:active {
+  transform: translateY(1px) scale(0.98);
+  filter: brightness(0.98);
+}
+
+/* メモ内のスタンプ枠もテーマに寄せる */
+.memo-stamp-preview{
+  border: 1px solid rgba(181,224,255,0.9);
+  background: linear-gradient(135deg, rgba(227,245,255,0.75), rgba(255,255,255,0.95));
+}
+
+/* テキストエリアもテーマに寄せる */
+#memoTextArea{
+  border: 1px solid rgba(181,224,255,0.95);
+  background: rgba(255,255,255,0.96);
+}
+
+/* 自動保存チップ：主張しすぎない */
+.autosave-chip{
+  color: var(--text-main);
+  opacity: 0.75;
+  border: 1px solid rgba(181,224,255,0.7);
+  background: rgba(255,255,255,0.65);
+}
+
+
+    .autosave-chip{
+      font-size:10px;
+      opacity:0.7;
+      padding: 2px 8px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(181,224,255,0.7);
     }
   </style>
 </head>
@@ -987,15 +859,16 @@
 
       <section class="stamp-panel">
         <div class="color-row">
-          <div class="color-label">
-            🎨 テーマカラー
-          </div>
+          <div class="color-label">🎨 テーマカラー</div>
           <div class="theme-palette" id="themePalette"></div>
         </div>
+
         <div class="stamp-label">
           <span>✨</span> スタンプをえらんでね（スタンプ編集でカスタム）
         </div>
+
         <div class="stamp-list" id="stampList"></div>
+
         <div class="stamp-extra">
           <div class="stamp-extra-left">
             <button class="btn sub tiny" id="editStampBtn">スタンプ編集</button>
@@ -1059,6 +932,7 @@
           カレンダー名
           <input type="text" id="firstCalendarName" placeholder="例）英単語、ストレッチ、おさんぽ など" />
         </label>
+
         <label>
           ごほうびが出る回数（1〜50回）
           <input type="number" id="firstRewardValue" min="1" max="50" value="15" />
@@ -1067,6 +941,7 @@
             ※1〜50のあいだで設定できます（上限50回）。
           </span>
         </label>
+
         <div class="modal-footer">
           <button class="btn" id="firstCalendarCreateBtn">はじめる</button>
         </div>
@@ -1089,7 +964,7 @@
           </div>
         </div>
         <div class="reward-message-main" id="rewardMessageMain"></div>
-        <div class="reward-message-sub">コツコツがんばっているあなたに、<br>ペンギンからごほうびだよ 🎁</div>
+        <div class="reward-message-sub">コツコツがんばっているあなたに、<br>ごほうびだよ 🎁</div>
         <div class="reward-message-sub2" id="rewardMessageSub2"></div>
         <div class="reward-actions">
           <button class="circle-btn" id="rewardCloseBtn">OK</button>
@@ -1100,12 +975,52 @@
     </div>
   </div>
 
+  <!-- メモオーバーレイ -->
+<div class="overlay hidden" id="memoOverlay">
+  <div class="modal memo-modal" id="memoModal">
+    <div class="modal-content">
+      <div class="modal-title memo-title">
+        <span>📝</span>
+        <div class="memo-title-text">
+          <div style="font-size:14px; font-weight:700;">メモ</div>
+          <div class="memo-sub">前日 / 翌日で日付を移動できます</div>
+        </div>
+      </div>
+
+      <!-- 前日/翌日：控えめ（目立たせない） -->
+      <div class="memo-nav-row">
+        <button class="btn ghost tiny" id="memoPrevBtn">← 前日</button>
+        <div class="memo-date-pill" id="memoDateLabel">----年--月--日</div>
+        <button class="btn ghost tiny" id="memoNextBtn">翌日 →</button>
+      </div>
+
+      <div class="memo-stamp-row">
+        <div class="memo-stamp-preview" id="memoStampPreview">（なし）</div>
+
+        <!-- スタンプ操作：主役だけハッキリ -->
+        <button class="btn tiny" id="memoStampToggleBtn">スタンプ押す</button>
+        <button class="btn sub tiny" id="memoClearStampBtn">削除</button>
+      </div>
+
+      <label class="memo-label">
+        メモ（複数行OK）
+        <textarea id="memoTextArea" placeholder="今日の気づき、できた理由、つまずきポイント…など"></textarea>
+      </label>
+
+      <div class="memo-footer">
+        <button class="btn ghost tiny" id="memoCloseBtn">閉じる</button>
+        <div class="autosave-chip" id="autosaveChip">自動保存</div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <input type="file" id="stampImageInput" accept="image/*" style="display:none;" />
 
   <script>
     (function () {
-      const STORAGE_KEY = "dekitaPenguinData_v2";
+      const STORAGE_KEY = "dekitaPenguinData_v3";
 
       const THEME_PRESETS = [
         {
@@ -1207,11 +1122,13 @@
       const addCalendarBtn = document.getElementById("addCalendarBtn");
       const deleteCalendarBtn = document.getElementById("deleteCalendarBtn");
       const screenshotBtn = document.getElementById("screenshotBtn");
+
       const stampList = document.getElementById("stampList");
       const monthLabel = document.getElementById("monthLabel");
       const calendarBody = document.getElementById("calendarBody");
       const calendarTitle = document.getElementById("calendarTitle");
       const noCalendarHint = document.getElementById("noCalendarHint");
+
       const themePalette = document.getElementById("themePalette");
       const progressArea = document.getElementById("progressArea");
       const stampHint = document.getElementById("stampHint");
@@ -1235,7 +1152,24 @@
       const stampImageInput = document.getElementById("stampImageInput");
       const addStampImageBtn = document.getElementById("addStampImageBtn");
 
+      // メモUI
+      const memoOverlay = document.getElementById("memoOverlay");
+      const memoModal = document.getElementById("memoModal");
+      const memoDateLabel = document.getElementById("memoDateLabel");
+      const memoTextArea = document.getElementById("memoTextArea");
+      const memoCloseBtn = document.getElementById("memoCloseBtn");
+      const memoStampPreview = document.getElementById("memoStampPreview");
+      const memoStampToggleBtn = document.getElementById("memoStampToggleBtn");
+      const memoClearStampBtn = document.getElementById("memoClearStampBtn");
+      const memoPrevBtn = document.getElementById("memoPrevBtn");
+      const memoNextBtn = document.getElementById("memoNextBtn");
+      const autosaveChip = document.getElementById("autosaveChip");
+
       let lastRewardTotal = 0;
+
+      // メモの現在位置
+      let memoCursor = null; // {y, m0, d}
+      let memoAutosaveTimer = null;
 
       function buildStampMaps() {
         const map = new Map();
@@ -1273,9 +1207,7 @@
       function getAllStamps() {
         const map = buildStampMaps();
         ensureStampOrder();
-        return state.stampOrder
-          .map(id => map.get(id))
-          .filter(Boolean);
+        return state.stampOrder.map(id => map.get(id)).filter(Boolean);
       }
 
       function findStampById(id) {
@@ -1329,7 +1261,7 @@
           };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
         } catch (e) {
-          console.warn("ローカルストレージに保存できませんでした", e);
+          console.warn("保存できませんでした", e);
         }
       }
 
@@ -1338,29 +1270,24 @@
           const raw = localStorage.getItem(STORAGE_KEY);
           if (!raw) return;
           const data = JSON.parse(raw);
+
           state.calendars = data.calendars || [];
           state.currentCalendarId =
             data.currentCalendarId ||
             (state.calendars[0] && state.calendars[0].id) ||
             null;
+
           const now = new Date();
           state.currentYear = data.currentYear ?? now.getFullYear();
           state.currentMonth = data.currentMonth ?? now.getMonth();
+
           state.customStamps = data.customStamps || [];
-
-          if (data.selectedStampId) {
-            state.selectedStampId = data.selectedStampId;
-          } else {
-            const idx = data.selectedStampIndex || 0;
-            state.selectedStampId = BUILTIN_STAMPS[idx]
-              ? BUILTIN_STAMPS[idx].id
-              : BUILTIN_STAMPS[0].id;
-          }
-
+          state.selectedStampId = data.selectedStampId || BUILTIN_STAMPS[0].id;
           state.stampOrder = data.stampOrder || [];
 
           state.calendars.forEach(cal => {
             if (!cal.stamps) cal.stamps = {};
+            if (!cal.memos) cal.memos = {}; // ←メモ保存先
             Object.keys(cal.stamps).forEach(key => {
               const v = cal.stamps[key];
               if (typeof v === "number") {
@@ -1369,14 +1296,12 @@
               }
             });
             if (!cal.themeId) cal.themeId = "blue";
-            if (!cal.rewardThreshold || cal.rewardThreshold <= 0) {
-              cal.rewardThreshold = 15;
-            }
+            if (!cal.rewardThreshold || cal.rewardThreshold <= 0) cal.rewardThreshold = 15;
           });
 
           ensureStampOrder();
         } catch (e) {
-          console.warn("ローカルストレージから読み込みに失敗しました", e);
+          console.warn("読み込みに失敗しました", e);
         }
       }
 
@@ -1415,9 +1340,11 @@
           id: Date.now() + Math.random(),
           name: name,
           stamps: {},
+          memos: {},          // ←追加
           themeId: "blue",
           rewardThreshold: safeRT
         };
+
         state.calendars.push(newCalendar);
         state.currentCalendarId = newCalendar.id;
         setTodayMonth();
@@ -1429,7 +1356,7 @@
       function deleteCurrentCalendar() {
         const current = getCurrentCalendar();
         if (!current) return;
-        const ok = window.confirm("「" + current.name + "」カレンダーを削除しますか？\nスタンプもすべて消えます。");
+        const ok = window.confirm("「" + current.name + "」カレンダーを削除しますか？\nスタンプ・メモもすべて消えます。");
         if (!ok) return;
 
         state.calendars = state.calendars.filter(c => c.id !== current.id);
@@ -1462,9 +1389,8 @@
           dot.className = "theme-dot";
           dot.dataset.themeId = theme.id;
           dot.style.background = `linear-gradient(135deg, ${theme.light}, ${theme.main})`;
-          if (theme.id === currentThemeId) {
-            dot.classList.add("active");
-          }
+          if (theme.id === currentThemeId) dot.classList.add("active");
+
           dot.addEventListener("click", () => {
             const cal = getCurrentCalendar();
             if (!cal) return;
@@ -1472,6 +1398,7 @@
             applyTheme(theme.id);
             saveState();
           });
+
           themePalette.appendChild(dot);
         });
       }
@@ -1479,13 +1406,12 @@
       function clearReorderState() {
         state.reorderActive = false;
         state.reorderSourceId = null;
-        document.querySelectorAll(".stamp-option").forEach(btn => {
-          btn.classList.remove("reorder-source");
-        });
+        document.querySelectorAll(".stamp-option").forEach(btn => btn.classList.remove("reorder-source"));
       }
 
       function deleteStampById(stampId) {
         if (BUILTIN_STAMPS.some(s => s.id === stampId)) return;
+
         const stamp = state.customStamps.find(s => s.id === stampId);
         if (!stamp) return;
 
@@ -1498,15 +1424,11 @@
         state.calendars.forEach(cal => {
           if (!cal.stamps) return;
           Object.keys(cal.stamps).forEach(key => {
-            if (cal.stamps[key] === stampId) {
-              delete cal.stamps[key];
-            }
+            if (cal.stamps[key] === stampId) delete cal.stamps[key];
           });
         });
 
-        if (state.selectedStampId === stampId) {
-          state.selectedStampId = BUILTIN_STAMPS[0].id;
-        }
+        if (state.selectedStampId === stampId) state.selectedStampId = BUILTIN_STAMPS[0].id;
 
         clearReorderState();
         saveState();
@@ -1562,10 +1484,7 @@
             }, longPressDuration);
           });
 
-          function cancelLongPress() {
-            clearTimeout(longPressTimer);
-          }
-
+          function cancelLongPress(){ clearTimeout(longPressTimer); }
           btn.addEventListener("pointerup", cancelLongPress);
           btn.addEventListener("pointercancel", cancelLongPress);
           btn.addEventListener("pointerleave", cancelLongPress);
@@ -1575,12 +1494,7 @@
 
             if (state.editMode && state.reorderActive) {
               const sourceId = state.reorderSourceId;
-              if (!sourceId) {
-                clearReorderState();
-                updateStampEditUI();
-                return;
-              }
-              if (sourceId === id) {
+              if (!sourceId || sourceId === id) {
                 clearReorderState();
                 updateStampEditUI();
                 return;
@@ -1611,14 +1525,11 @@
       }
 
       function updateStampEditUI() {
-        if (!editStampBtn) return;
         if (state.editMode) {
           editStampBtn.textContent = "スタンプ編集完了";
           addStampImageBtn.style.display = "inline-flex";
           rewardConfigBtn.style.display = "none";
-          if (!state.reorderActive) {
-            stampHint.textContent = "スタンプの追加・並び替え・削除ができます";
-          }
+          if (!state.reorderActive) stampHint.textContent = "スタンプの追加・並び替え・削除ができます";
         } else {
           editStampBtn.textContent = "スタンプ編集";
           addStampImageBtn.style.display = "none";
@@ -1656,10 +1567,9 @@
         const threshold = getRewardThreshold(calendar);
         const steps = threshold > 0 ? threshold : 1;
         const inCycle = threshold > 0 ? (total % threshold) : 0;
+
         const nextMilestone =
-          total === 0
-            ? threshold
-            : threshold * (Math.floor(total / threshold) + 1);
+          total === 0 ? threshold : threshold * (Math.floor(total / threshold) + 1);
         const remaining = threshold > 0 ? (nextMilestone - total) : 0;
 
         const trackWidth = Math.max(steps * 18 + 16, 260);
@@ -1680,11 +1590,7 @@
           const filled = inCycle === 0 ? false : i <= inCycle;
           const isPenguin = (inCycle === 0 && i === 1) || (inCycle > 0 && i === inCycle);
           html += '<div class="progress-step' + (filled ? " filled" : "") + '">';
-          if (isPenguin) {
-            html += '<div class="progress-penguin-icon">🐧</div>';
-          } else {
-            html += '<div style="height:16px;"></div>';
-          }
+          html += isPenguin ? '<div class="progress-penguin-icon">🐧</div>' : '<div style="height:16px;"></div>';
           html += '<div class="progress-dot"></div>';
           html += "</div>";
         }
@@ -1724,6 +1630,7 @@
         const isCurrentMonth = (today.getFullYear() === year && today.getMonth() === month0);
 
         let dayNum = 1;
+
         for (let week = 0; week < 6; week++) {
           const tr = document.createElement("tr");
 
@@ -1732,7 +1639,7 @@
             const inner = document.createElement("div");
             inner.className = "day-inner";
 
-            if (week === 0 && dow < firstDay || dayNum > daysInMonth) {
+            if ((week === 0 && dow < firstDay) || dayNum > daysInMonth) {
               td.className = "day-cell empty";
               td.appendChild(inner);
             } else {
@@ -1747,13 +1654,13 @@
               stampEl.className = "day-stamp";
 
               const key = dateKey(year, month0, dayNum);
+
+              // スタンプ
               const stampId = cal.stamps[key];
               const stamp = findStampById(stampId);
-
               if (stamp) {
-                if (stamp.type === "emoji") {
-                  stampEl.textContent = stamp.emoji;
-                } else if (stamp.type === "image") {
+                if (stamp.type === "emoji") stampEl.textContent = stamp.emoji;
+                else {
                   const img = document.createElement("img");
                   img.src = stamp.dataUrl;
                   img.alt = "stamp";
@@ -1761,12 +1668,18 @@
                 }
               }
 
+              // メモありインジケータ（追加）
+              const memoText = cal.memos && cal.memos[key] ? String(cal.memos[key]) : "";
+              if (memoText.trim() !== "") {
+                const dot = document.createElement("div");
+                dot.className = "memo-dot";
+                inner.appendChild(dot);
+              }
+
               inner.appendChild(number);
               inner.appendChild(stampEl);
 
-              if (isCurrentMonth && dayNum === today.getDate()) {
-                td.classList.add("day-today");
-              }
+              if (isCurrentMonth && dayNum === today.getDate()) td.classList.add("day-today");
 
               td.appendChild(inner);
               dayNum++;
@@ -1793,58 +1706,14 @@
         updateStampEditUI();
       }
 
-      function handleDayClick(e) {
-        const cell = e.target.closest(".day-cell");
-        if (!cell || cell.classList.contains("empty")) return;
-
-        const dayStr = cell.dataset.day;
-        if (!dayStr) return;
-
-        addPressedAnimation(cell);
-
-        const cal = getCurrentCalendar();
-        if (!cal) return;
-
-        const day = Number(dayStr);
-        const year = state.currentYear;
-        const month0 = state.currentMonth;
-        const key = dateKey(year, month0, day);
-
-        const beforeCount = stampCount(cal);
-        const currentStampId = cal.stamps[key];
-        const selectedId = state.selectedStampId;
-        if (!selectedId) return;
-
-        if (currentStampId === selectedId) {
-          delete cal.stamps[key];
-        } else if (currentStampId) {
-          cal.stamps[key] = selectedId;
-        } else {
-          cal.stamps[key] = selectedId;
-        }
-
-        const afterCount = stampCount(cal);
-        const threshold = getRewardThreshold(cal);
-
-        if (threshold > 0 &&
-            Math.floor(afterCount / threshold) > Math.floor(beforeCount / threshold)) {
-          showReward(afterCount, threshold);
-        }
-
-        saveState();
-        renderCalendar();
-      }
-
+      /* ========== ごほうび ========== */
       function showReward(total, threshold) {
         lastRewardTotal = total;
         rewardMessageMain.textContent = total + "回できたね！ごほうびをゲット 🎉";
         rewardMessageSub2.textContent = "このカレンダーは " + threshold + "回ごとに宝箱がひらくよ。";
         rewardOverlay.classList.remove("hidden");
       }
-
-      function closeReward() {
-        rewardOverlay.classList.add("hidden");
-      }
+      function closeReward() { rewardOverlay.classList.add("hidden"); }
 
       async function shareReward(total) {
         const target = document.getElementById("calendarCapture");
@@ -1859,10 +1728,7 @@
         const name = cal ? cal.name : "カレンダー";
         const text = `「${name}」を${total}回できたよ！ #できたよペンギン`;
 
-        const canvas = await html2canvas(target, {
-          scale: 2,
-          backgroundColor: "#ffffff"
-        });
+        const canvas = await html2canvas(target, { scale: 2, backgroundColor: "#ffffff" });
 
         canvas.toBlob(async (blob) => {
           if (!blob) return;
@@ -1882,9 +1748,7 @@
               }
             }
 
-            if (navigator.share) {
-              await navigator.share({ text });
-            }
+            if (navigator.share) await navigator.share({ text });
 
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -1895,14 +1759,13 @@
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 2000);
 
-            if (navigator.clipboard && navigator.clipboard.writeText) {
+            if (navigator.clipboard?.writeText) {
               await navigator.clipboard.writeText(text);
               alert("スクショを保存しました！\n投稿用メッセージもコピーしました。");
             } else {
               alert("スクショを保存しました！\n投稿文:\n" + text);
             }
           } catch (err) {
-            console.log(err);
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
@@ -1928,10 +1791,7 @@
         const cal = getCurrentCalendar();
         const name = cal ? cal.name : "calendar";
 
-        html2canvas(target, {
-          scale: 2,
-          backgroundColor: "#ffffff"
-        }).then(canvas => {
+        html2canvas(target, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
           canvas.toBlob(function (blob) {
             if (!blob) return;
             const url = URL.createObjectURL(blob);
@@ -1950,6 +1810,7 @@
         });
       }
 
+      /* ========== スタンプ画像追加 ========== */
       function handleAddStampImage() {
         if (!state.editMode) return;
         addPressedAnimation(addStampImageBtn);
@@ -1968,14 +1829,12 @@
         reader.onload = function (e) {
           const dataUrl = e.target.result;
           const id = "c_" + Date.now() + "_" + Math.random().toString(16).slice(2);
-          const stamp = {
-            id,
-            type: "image",
-            dataUrl
-          };
+          const stamp = { id, type: "image", dataUrl };
           state.customStamps.push(stamp);
+
           ensureStampOrder();
           state.selectedStampId = id;
+
           saveState();
           renderStampOptions();
           updateStampEditUI();
@@ -1985,10 +1844,7 @@
 
       function openRewardConfig() {
         const cal = getCurrentCalendar();
-        if (!cal) {
-          alert("カレンダーを作成してから設定してください。");
-          return;
-        }
+        if (!cal) { alert("カレンダーを作成してから設定してください。"); return; }
         const current = getRewardThreshold(cal);
         const input = prompt("ごほうびは何回できたら表示しますか？（1〜50）", String(current));
         if (input === null) return;
@@ -2002,15 +1858,156 @@
         renderCalendar();
       }
 
+      /* ========== メモ ========== */
+      function formatDateJP(y, m0, d) { return `${y}年${m0 + 1}月${d}日`; }
+
+      function renderMemoStampPreview(key) {
+        const cal = getCurrentCalendar();
+        memoStampPreview.innerHTML = "";
+
+        const stampId = cal?.stamps?.[key];
+        const stamp = findStampById(stampId);
+
+        if (!stamp) {
+          memoStampPreview.textContent = "（なし）";
+          memoStampPreview.style.fontSize = "12px";
+          memoStampPreview.style.opacity = "0.75";
+          return;
+        }
+
+        memoStampPreview.style.opacity = "1";
+        memoStampPreview.style.fontSize = "26px";
+
+        if (stamp.type === "emoji") {
+          memoStampPreview.textContent = stamp.emoji;
+        } else {
+          const img = document.createElement("img");
+          img.src = stamp.dataUrl;
+          img.alt = "stamp";
+          memoStampPreview.appendChild(img);
+        }
+      }
+
+      function openMemoForDate(y, m0, d) {
+        const cal = getCurrentCalendar();
+        if (!cal) return;
+
+        memoCursor = { y, m0, d };
+        const key = dateKey(y, m0, d);
+
+        memoDateLabel.textContent = formatDateJP(y, m0, d);
+        memoTextArea.value = (cal.memos && cal.memos[key]) ? cal.memos[key] : "";
+        renderMemoStampPreview(key);
+
+        memoOverlay.classList.remove("hidden");
+        scheduleMemoAutosave(true);
+      }
+
+      function closeMemo() {
+        memoOverlay.classList.add("hidden");
+        memoCursor = null;
+      }
+
+      function saveMemoCurrent() {
+        const cal = getCurrentCalendar();
+        if (!cal || !memoCursor) return;
+        const { y, m0, d } = memoCursor;
+        const key = dateKey(y, m0, d);
+
+        const text = memoTextArea.value ?? "";
+        if (!cal.memos) cal.memos = {};
+
+        if (text.trim() === "") delete cal.memos[key];
+        else cal.memos[key] = text;
+
+        saveState();
+      }
+
+      // 自動保存（追加）
+      function scheduleMemoAutosave(isFirst = false) {
+        if (!memoCursor) return;
+        if (memoAutosaveTimer) clearTimeout(memoAutosaveTimer);
+        if (isFirst) return; // 開いた直後はタイマー不要
+        memoAutosaveTimer = setTimeout(() => {
+          saveMemoCurrent();
+          // 画面側のメモ点も更新（追加）
+          renderCalendar();
+        }, 450);
+      }
+
+      function moveMemoBy(daysDelta) {
+        if (!memoCursor) return;
+        saveMemoCurrent();
+
+        const dt = new Date(memoCursor.y, memoCursor.m0, memoCursor.d);
+        dt.setDate(dt.getDate() + daysDelta);
+
+        const y = dt.getFullYear();
+        const m0 = dt.getMonth();
+        const d = dt.getDate();
+
+        // 月またぎも追従
+        state.currentYear = y;
+        state.currentMonth = m0;
+        saveState();
+        renderCalendar();
+
+        openMemoForDate(y, m0, d);
+      }
+
+      function handleStampInMemo(toggleMode) {
+        const cal = getCurrentCalendar();
+        if (!cal || !memoCursor) return;
+
+        const { y, m0, d } = memoCursor;
+        const key = dateKey(y, m0, d);
+
+        const beforeCount = stampCount(cal);
+        const currentStampId = cal.stamps[key];
+        const selectedId = state.selectedStampId;
+
+        if (toggleMode) {
+          if (currentStampId === selectedId) delete cal.stamps[key];
+          else cal.stamps[key] = selectedId;
+        } else {
+          delete cal.stamps[key];
+        }
+
+        const afterCount = stampCount(cal);
+        const threshold = getRewardThreshold(cal);
+
+        // 仕様：消して14→再度15になったら再演出OK（floor差分で判定）
+        if (threshold > 0 &&
+            Math.floor(afterCount / threshold) > Math.floor(beforeCount / threshold)) {
+          showReward(afterCount, threshold);
+        }
+
+        saveState();
+        renderCalendar();
+        renderMemoStampPreview(key);
+      }
+
+      /* ========== イベント ========== */
       function attachEvents() {
-        calendarBody.addEventListener("click", handleDayClick);
+        // カレンダー：日付タップでメモ画面を開く
+        calendarBody.addEventListener("click", (e) => {
+          const cell = e.target.closest(".day-cell");
+          if (!cell || cell.classList.contains("empty")) return;
+
+          const dayStr = cell.dataset.day;
+          if (!dayStr) return;
+
+          addPressedAnimation(cell);
+          const cal = getCurrentCalendar();
+          if (!cal) return;
+
+          const d = Number(dayStr);
+          openMemoForDate(state.currentYear, state.currentMonth, d);
+        });
 
         prevMonthBtn.addEventListener("click", () => {
           state.currentMonth -= 1;
-          if (state.currentMonth < 0) {
-            state.currentMonth = 11;
-            state.currentYear -= 1;
-          }
+          if (state.currentMonth < 0) { state.currentMonth = 11; state.currentYear -= 1; }
           saveState();
           renderCalendar();
           addPressedAnimation(prevMonthBtn);
@@ -2018,10 +2015,7 @@
 
         nextMonthBtn.addEventListener("click", () => {
           state.currentMonth += 1;
-          if (state.currentMonth > 11) {
-            state.currentMonth = 0;
-            state.currentYear += 1;
-          }
+          if (state.currentMonth > 11) { state.currentMonth = 0; state.currentYear += 1; }
           saveState();
           renderCalendar();
           addPressedAnimation(nextMonthBtn);
@@ -2029,23 +2023,25 @@
 
         addCalendarBtn.addEventListener("click", () => {
           const name = window.prompt("新しいカレンダーの名前を入力してください", "");
-          if (!name || !name.trim()) {
-            addPressedAnimation(addCalendarBtn);
-            return;
-          }
+          if (!name || !name.trim()) { addPressedAnimation(addCalendarBtn); return; }
           const rtInput = window.prompt("ごほうびは何回できたら表示しますか？（1〜50）", "15");
           const rt = rtInput ? parseInt(rtInput, 10) : 15;
           createCalendar(name.trim(), rt);
           addPressedAnimation(addCalendarBtn);
         });
 
-        deleteCalendarBtn.addEventListener("click", () => {
-          deleteCurrentCalendar();
-        });
+        deleteCalendarBtn.addEventListener("click", () => deleteCurrentCalendar());
 
         calendarSelect.addEventListener("change", () => {
           const id = Number(calendarSelect.value);
           if (!id) return;
+
+          // メモが開いていたらいったん保存して閉じる
+          if (!memoOverlay.classList.contains("hidden")) {
+            saveMemoCurrent();
+            closeMemo();
+          }
+
           state.currentCalendarId = id;
           setTodayMonth();
           saveState();
@@ -2069,35 +2065,19 @@
         });
 
         firstCalendarNameInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            firstCalendarCreateBtn.click();
-          }
+          if (e.key === "Enter") firstCalendarCreateBtn.click();
         });
 
-        rewardCloseBtn.addEventListener("click", () => {
-          closeReward();
-        });
-
-        rewardOverlay.addEventListener("click", (e) => {
-          if (e.target === rewardOverlay) {
-            closeReward();
-          }
-        });
-
-        rewardShareBtn.addEventListener("click", () => {
-          if (lastRewardTotal > 0) {
-            shareReward(lastRewardTotal);
-          }
-        });
+        rewardCloseBtn.addEventListener("click", closeReward);
+        rewardOverlay.addEventListener("click", (e) => { if (e.target === rewardOverlay) closeReward(); });
+        rewardShareBtn.addEventListener("click", () => { if (lastRewardTotal > 0) shareReward(lastRewardTotal); });
 
         addStampImageBtn.addEventListener("click", handleAddStampImage);
         stampImageInput.addEventListener("change", handleStampImageChange);
 
         editStampBtn.addEventListener("click", () => {
           state.editMode = !state.editMode;
-          if (!state.editMode) {
-            clearReorderState();
-          }
+          if (!state.editMode) clearReorderState();
           renderStampOptions();
           updateStampEditUI();
         });
@@ -2105,6 +2085,44 @@
         rewardConfigBtn.addEventListener("click", () => {
           addPressedAnimation(rewardConfigBtn);
           openRewardConfig();
+        });
+
+        // メモ：ボタン
+        memoCloseBtn.addEventListener("click", () => {
+          saveMemoCurrent();
+          renderCalendar();
+          closeMemo();
+        });
+
+        memoPrevBtn.addEventListener("click", () => { addPressedAnimation(memoPrevBtn); moveMemoBy(-1); });
+        memoNextBtn.addEventListener("click", () => { addPressedAnimation(memoNextBtn); moveMemoBy(+1); });
+
+        memoStampToggleBtn.addEventListener("click", () => { addPressedAnimation(memoStampToggleBtn); handleStampInMemo(true); });
+        memoClearStampBtn.addEventListener("click", () => { addPressedAnimation(memoClearStampBtn); handleStampInMemo(false); });
+
+        // メモ：自動保存（入力時）
+        memoTextArea.addEventListener("input", () => {
+  autosaveChip.textContent = "保存中…";
+  scheduleMemoAutosave(false);
+  clearTimeout(memoTextArea._chipTimer);
+  memoTextArea._chipTimer = setTimeout(() => {
+    autosaveChip.textContent = "自動保存";
+  }, 700);
+});
+
+
+        // メモ：背景タップで閉じる
+        memoOverlay.addEventListener("click", (e) => {
+          if (e.target === memoOverlay) {
+            saveMemoCurrent();
+            renderCalendar();
+            closeMemo();
+          }
+        });
+
+        // ページ離脱前も保存
+        window.addEventListener("beforeunload", () => {
+          if (!memoOverlay.classList.contains("hidden")) saveMemoCurrent();
         });
       }
 
